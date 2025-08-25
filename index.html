@@ -656,24 +656,31 @@ U.qs('#exportBookings').onclick = ()=> {
    Ticket PDF generation (simple)
    - uses embedded jsPDF tiny builder
 ----------------------------*/
-function generateTicketPDF(booking, bus){
-  try{
-    const doc = new jspdf.jsPDF();
-    let y=40;
-    doc.text("Bus e-Ticket (Demo)", 40, y); y+=16;
-    doc.text("PNR: " + booking.pnr, 40, y); y+=12;
-    doc.text("Passenger: " + booking.user, 40, y); y+=12;
-    doc.text("Bus No: " + (booking.busNo || bus.busNo), 40, y); y+=12;
-    doc.text("Route: " + (booking.route || (bus.from+'→'+bus.to)), 40, y); y+=12;
-    doc.text("Date/Time: " + (booking.date || bus.date) + " / " + (booking.time || bus.time), 40, y); y+=12;
-    doc.text("Seats: " + booking.seats.join(', '), 40, y); y+=12;
-    doc.text("Amount: " + U.money(booking.amount), 40, y); y+=12;
-    doc.text("Status: " + booking.status, 40, y); y+=12;
-    doc.text("Generated: " + new Date().toLocaleString(), 40, y); y+=12;
-    doc.save('Ticket_'+booking.pnr+'.pdf');
-    // mark booking as having pdf available
-    const bookings = DB.load('bookings', []); const bk = bookings.find(x=>x.pnr===booking.pnr); if(bk){ bk.pdf = true; DB.save('bookings', bookings); }
-  }catch(e){ console.error('pdf err', e); alert('PDF generation failed') }
+// Generate PDF ticket
+try {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text("Bus Ticket Confirmation", 20, 20);
+
+  doc.setFontSize(12);
+  doc.text(`PNR: ${pnr}`, 20, 35);
+  doc.text(`Passenger: ${s.username}`, 20, 45);
+  doc.text(`Bus No: ${bus.busNo || 'N/A'}`, 20, 55);
+  doc.text(`Route: ${bus.from} → ${bus.to}`, 20, 65);
+  doc.text(`Date: ${bus.date}   Time: ${bus.time}`, 20, 75);
+  doc.text(`Seats: ${selectedSeats.map(i=>i+1).join(', ')}`, 20, 85);
+  doc.text(`Amount Paid: ₹${amount}`, 20, 95);
+  doc.text(`Status: CONFIRMED (Subject to Admin Approval)`, 20, 105);
+
+  // save as Ticket_PNRxxxx.pdf
+  doc.save(`Ticket_${pnr}.pdf`);
+
+  alert('Payment successful! PDF Ticket downloaded.');
+} catch (err) {
+  console.error("PDF error:", err);
+  alert("PDF generation failed. Check console.");
 }
 
 /* ---------------------------
