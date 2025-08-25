@@ -1,1245 +1,613 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Druthi Rath Bus Booking System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        .seat {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.875rem;
-        }
-        .seat.available {
-            background-color: #d1fae5;
-            border: 2px solid #99f6e4;
-        }
-        .seat.available:hover {
-            background-color: #a7f3d0;
-            transform: scale(1.05);
-        }
-        .seat.selected {
-            background-color: #3b82f6;
-            color: white;
-            border: 2px solid #2563eb;
-        }
-        .seat.booked {
-            background-color: #ef4444;
-            color: white;
-            border: 2px solid #dc2626;
-            cursor: not-allowed;
-        }
-        .seat.sleeper {
-            background-color: #c7d2fe;
-            border: 2px solid #818cf8;
-        }
-        .seat.sleeper:hover {
-            background-color: #a5b4fc;
-        }
-        .seat.lower {
-            background-color: #fde68a;
-            border: 2px solid #fbbf24;
-        }
-        .seat.lower:hover {
-            background-color: #fcd34d;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.875rem;
-        }
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 4px;
-        }
-        /* Fix for form input issue */
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            transition: all 0.2s;
-        }
-        .form-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            border-color: #3b82f6;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bus Live Seat Booking — Demo (HTML Only)</title>
+<style>
+  :root{
+    --bg:#0f172a;        /* slate-900 */
+    --panel:#111827;     /* gray-900 */
+    --muted:#1f2937;     /* gray-800 */
+    --text:#e5e7eb;      /* gray-200 */
+    --sub:#9ca3af;       /* gray-400 */
+    --brand:#22c55e;     /* green-500 */
+    --brand-2:#3b82f6;   /* blue-500 */
+    --danger:#ef4444;    /* red-500 */
+    --warn:#f59e0b;      /* amber-500 */
+    --ok:#10b981;        /* emerald-500 */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:linear-gradient(135deg, #0f172a 0%, #0b1227 100%);
+    color:var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 20px;
+    position:sticky;top:0;z-index:5;
+    background:rgba(15,23,42,.85);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid #1f2937;
+  }
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800}
+  .brand .logo{
+    width:36px;height:36px;border-radius:12px;
+    background: radial-gradient(120% 120% at 30% 30%, var(--brand) 0%, var(--brand-2) 50%, #6d28d9 100%);
+    box-shadow:0 8px 30px rgba(59,130,246,.35);
+  }
+  .badge{font-size:12px;color:#a7f3d0;border:1px solid #064e3b;padding:4px 8px;border-radius:999px;background:#064e3b22}
+  main{width:min(1100px, 96%);margin:24px auto;display:grid;gap:16px}
+  .grid{display:grid;gap:16px}
+  .two{grid-template-columns: 1.2fr .8fr}
+  @media (max-width: 960px){.two{grid-template-columns: 1fr}}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+    border:1px solid #1f2937; border-radius:18px; padding:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+  }
+  .card h3{margin:0 0 12px;font-size:18px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .space{justify-content:space-between}
+  input, select, button, textarea{
+    background:#0b1227;border:1px solid #273249;
+    color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none;
+  }
+  input:focus, select:focus, textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+  button{cursor:pointer;border:none}
+  .btn{background:var(--brand-2);font-weight:600}
+  .btn.alt{background:var(--brand)}
+  .btn.ghost{background:transparent;border:1px solid #334155}
+  .btn.warn{background:var(--warn)}
+  .btn.danger{background:var(--danger)}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .divider{height:1px;background:#1f2937;margin:12px 0}
+  .tabs{display:flex; gap:8px; flex-wrap:wrap}
+  .tab{padding:8px 12px;border-radius:999px;border:1px solid #334155;background:#0b1227;cursor:pointer}
+  .tab.active{background:#1e293b}
+  .pill{padding:4px 8px;border-radius:999px;background:#0b1227;border:1px solid #334155;color:#cbd5e1;font-size:12px}
+  .list{display:grid;gap:10px}
+  .list-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #1f2937;border-radius:14px;background:linear-gradient(180deg, #0b1227, #0a1020)}
+  .small{font-size:12px;color:var(--sub)}
+  .right{margin-left:auto}
+  .seat-grid{
+    display:grid;grid-template-columns: repeat(4, 1fr);gap:8px;background:#0b1227;border:1px dashed #334155;padding:12px;border-radius:14px
+  }
+  .seat{
+    height:42px;border-radius:10px;border:1px solid #334155;
+    display:flex;align-items:center;justify-content:center;
+    user-select:none
+  }
+  .seat.free{background:#052e1a;border-color:#064e3b;color:#86efac}
+  .seat.selected{background:#062a48;border-color:#1d4ed8;color:#bfdbfe;box-shadow:0 0 0 3px rgba(59,130,246,.25) inset}
+  .seat.booked{background:#3a0d0d;border-color:#7f1d1d;color:#fecaca;text-decoration:line-through}
+  .legend{display:flex;gap:10px;align-items:center}
+  .legend .swatch{width:14px;height:14px;border-radius:4px;border:1px solid #334155}
+  .swatch.free{background:#052e1a;border-color:#064e3b}
+  .swatch.sel{background:#062a48;border-color:#1d4ed8}
+  .swatch.booked{background:#3a0d0d;border-color:#7f1d1d}
+  .notice{padding:10px;border-left:3px solid #3b82f6;background:#0b1227;border-radius:8px}
+  .table{width:100%;border-collapse:collapse}
+  .table th, .table td{border-bottom:1px solid #1f2937;text-align:left;padding:8px}
+  .table th{color:#cbd5e1;font-weight:700}
+  .kicker{color:#a5b4fc;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+</style>
 </head>
 <body>
-    <div id="app"></div>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <div>Bus Live Seat Booking</div>
+        <div class="small">Pure HTML + CSS + JS (LocalStorage)</div>
+      </div>
+    </div>
+    <div id="sessionArea" class="row"></div>
+  </header>
 
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+  <main class="grid two">
+    <!-- Left: Booking & User -->
+    <section class="grid" id="bookingArea">
+      <div class="card">
+        <div class="row space">
+          <h3>Find a Bus</h3>
+          <span class="pill" id="busCountPill">0 buses</span>
+        </div>
+        <div class="row" style="gap:12px;flex-wrap:wrap">
+          <input id="fromInp" placeholder="From (e.g., Bhubaneswar)" />
+          <input id="toInp" placeholder="To (e.g., Kolkata)" />
+          <input id="dateInp" type="date" />
+          <button class="btn" id="searchBtn">Search</button>
+          <button class="btn ghost" id="resetBtn">Reset</button>
+        </div>
+        <div class="divider"></div>
+        <div id="busList" class="list"></div>
+      </div>
 
-        class BusBookingApp {
-            constructor() {
-                this.state = {
-                    currentUser: null,
-                    users: [
-                        { id: 1, username: 'admin', password: 'admin123', role: 'admin', name: 'Admin User' },
-                        { id: 2, username: 'user1', password: 'pass123', role: 'user', name: 'John Doe' }
-                    ],
-                    buses: [
-                        {
-                            id: 1,
-                            name: 'Druthi Rath Express',
-                            route: 'Chennai - Bangalore',
-                            totalSeats: 50,
-                            departureTime: '08:00',
-                            arrivalTime: '14:00',
-                            date: '2025-08-26',
-                            departureLocation: 'Chennai Central Bus Stand',
-                            arrivalLocation: 'Bangalore Kempegowda Bus Station',
-                            duration: '6 hours',
-                            amenities: ['AC', 'WiFi', 'Water Bottles', 'Snacks'],
-                            expenses: [
-                                { id: 1, type: 'Fuel', amount: 5000, description: 'Diesel for route' },
-                                { id: 2, type: 'Driver', amount: 2000, description: 'Driver salary' },
-                                { id: 3, type: 'Maintenance', amount: 1500, description: 'Bus maintenance' }
-                            ],
-                            seatPricing: {
-                                'lower': 500,
-                                'upper': 600,
-                                'sleeper': 800
-                            }
-                        }
-                    ],
-                    bookings: [],
-                    activeTab: 'booking',
-                    showLogin: true,
-                    loginData: { username: '', password: '' },
-                    signupData: { username: '', password: '', name: '' },
-                    showPassword: false,
-                    selectedBus: null,
-                    selectedSeats: [],
-                    seatManagement: {
-                        editing: false,
-                        prices: {
-                            lower: 500,
-                            upper: 600,
-                            sleeper: 800
-                        }
-                    },
-                    travelDetails: {
-                        editing: false,
-                        details: {
-                            departureLocation: 'Chennai Central Bus Stand',
-                            arrivalLocation: 'Bangalore Kempegowda Bus Station',
-                            departureTime: '08:00',
-                            arrivalTime: '14:00',
-                            duration: '6 hours',
-                            amenities: ['AC', 'WiFi', 'Water Bottles', 'Snacks'],
-                            rules: [
-                                'No smoking allowed',
-                                'Please carry valid ID proof',
-                                'Luggage limit: 15kg per person',
-                                'Food and drinks are provided',
-                                'Report any issues to the conductor'
-                            ]
-                        }
-                    }
-                };
-                this.generateSeatsForBuses();
-                this.render();
-                this.startRealTimeUpdates();
-            }
+      <div class="card" id="seatCard" style="display:none">
+        <div class="row space">
+          <h3 id="seatTitle">Select Seats</h3>
+          <div class="legend">
+            <div class="swatch free"></div><span class="small">Free</span>
+            <div class="swatch sel"></div><span class="small">Selected</span>
+            <div class="swatch booked"></div><span class="small">Booked</span>
+          </div>
+        </div>
+        <div id="seatGrid" class="seat-grid"></div>
+        <div class="row space" style="margin-top:12px">
+          <div class="row" style="gap:8px">
+            <span class="small">Selected:</span>
+            <span id="selSeats" class="pill">None</span>
+          </div>
+          <div class="row" style="gap:8px">
+            <span class="small">Total:</span>
+            <span id="totalFare" class="pill">₹0</span>
+            <button class="btn alt" id="payBtn" disabled>Proceed to Payment</button>
+          </div>
+        </div>
+      </div>
 
-            generateSeats(totalSeats) {
-                const seats = [];
-                const seatLabels = [
-                    'SL1A1', 'B1', 'C1', 'SP1', 'SR1',
-                    'SL1A2', 'B2', 'C2', 'SP1', 'SR1',
-                    'SL2A3', 'B3', 'C3', 'SP2', 'SR2',
-                    'SL2A4', 'B4', 'C4', 'SP2', 'SR2',
-                    'SL3A5', 'B5', 'C5', 'SP3', 'SR3',
-                    'SL3A6', 'B6', 'C6', 'SP3', 'SR3',
-                    'SL4A7', 'B7', 'C7', 'SP4', 'SR4',
-                    'SL4A8', 'B8', 'C8', 'SP4', 'SR4',
-                    'SL5A9', 'B9', 'C9', 'SP5', 'SR5',
-                    'SL5A10', 'B10', 'C10', 'SP5', 'SR5'
-                ];
+      <div class="card" id="paymentCard" style="display:none">
+        <h3>Payment</h3>
+        <div class="notice small">Demo payment only. No real charge. Choose a method and click Pay.</div>
+        <div class="row" style="gap:12px;margin-top:10px">
+          <select id="payMethod">
+            <option value="UPI">UPI</option>
+            <option value="Card">Card</option>
+            <option value="NetBanking">Net Banking</option>
+          </select>
+          <input id="payRef" placeholder="UPI ID / Card ****1234 / Bank Ref" />
+          <button class="btn" id="confirmPayBtn">Pay & Confirm</button>
+          <button class="btn ghost" id="cancelPayBtn">Cancel</button>
+        </div>
+      </div>
 
-                for (let i = 0; i < Math.min(totalSeats, seatLabels.length); i++) {
-                    let type = 'lower';
-                    let price = this.state.buses[0].seatPricing.lower;
-                    
-                    if (seatLabels[i].startsWith('SL')) {
-                        type = 'lower';
-                        price = this.state.buses[0].seatPricing.lower;
-                    } else if (seatLabels[i].startsWith('SP') || seatLabels[i].startsWith('SR')) {
-                        type = 'sleeper';
-                        price = this.state.buses[0].seatPricing.sleeper;
-                    } else {
-                        type = 'upper';
-                        price = this.state.buses[0].seatPricing.upper;
-                    }
+      <div class="card" id="myBookingsCard" style="display:none">
+        <h3>My Bookings</h3>
+        <table class="table" id="myBookingsTable">
+          <thead>
+            <tr>
+              <th>PNR</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
 
-                    seats.push({
-                        id: i + 1,
-                        number: seatLabels[i],
-                        isBooked: false,
-                        bookedBy: null,
-                        type: type,
-                        price: price
-                    });
-                }
-                return seats;
-            }
+    <!-- Right: Auth & Admin -->
+    <aside class="grid" id="rightSide">
+      <div class="card" id="authCard">
+        <div class="tabs" style="margin-bottom:8px">
+          <button class="tab active" data-tab="loginTab">Login</button>
+          <button class="tab" data-tab="signupTab">Sign Up</button>
+          <button class="tab" data-tab="adminTab">Admin</button>
+        </div>
 
-            generateSeatsForBuses() {
-                this.state.buses = this.state.buses.map(bus => ({
-                    ...bus,
-                    seats: bus.seats || this.generateSeats(bus.totalSeats)
-                }));
-            }
+        <div id="loginTab">
+          <div class="kicker">User Login</div>
+          <div class="row" style="margin-top:10px;gap:8px">
+            <input id="loginUser" placeholder="Username" />
+            <input id="loginPass" type="password" placeholder="Password" />
+            <button class="btn" id="loginBtn">Login</button>
+          </div>
+        </div>
 
-            startRealTimeUpdates() {
-                setInterval(() => {
-                    this.updateSeatStatus();
-                    if (this.state.selectedBus) {
-                        this.updateSelectedBus();
-                    }
-                }, 1000);
-            }
+        <div id="signupTab" style="display:none">
+          <div class="kicker">Create Account</div>
+          <div class="row" style="margin-top:10px;gap:8px">
+            <input id="suUser" placeholder="Choose Username" />
+            <input id="suPass" type="password" placeholder="Choose Password" />
+            <button class="btn alt" id="signupBtn">Sign Up</button>
+          </div>
+          <div class="small" style="margin-top:8px">Tip: Keep it simple. You can log in immediately after sign up.</div>
+        </div>
 
-            updateSeatStatus() {
-                this.state.buses = this.state.buses.map(bus => ({
-                    ...bus,
-                    seats: bus.seats.map(seat => ({
-                        ...seat,
-                        isBooked: this.state.bookings.some(booking => 
-                            booking.busId === bus.id && booking.seatNumbers.includes(seat.number)
-                        ),
-                        bookedBy: this.state.bookings.find(booking => 
-                            booking.busId === bus.id && booking.seatNumbers.includes(seat.number)
-                        )?.userId
-                    }))
-                }));
-            }
+        <div id="adminTab" style="display:none">
+          <div class="kicker">Admin Login</div>
+          <div class="row" style="margin-top:10px;gap:8px">
+            <input id="adminUser" placeholder="Admin ID (default: admin)" />
+            <input id="adminPass" type="password" placeholder="Password (default: admin123)" />
+            <button class="btn warn" id="adminLoginBtn">Login</button>
+          </div>
+        </div>
+      </div>
 
-            updateSelectedBus() {
-                const bus = this.state.buses.find(b => b.id === this.state.selectedBus.id);
-                if (bus) {
-                    this.state.selectedBus = bus;
-                }
-            }
+      <div class="card" id="adminPanel" style="display:none">
+        <div class="row space"><h3>Admin Panel</h3><button class="btn ghost" id="adminLogoutBtn">Logout</button></div>
+        <div class="divider"></div>
+        <div class="kicker">Create / Edit Bus</div>
+        <div class="row" style="gap:8px;margin-top:8px;flex-wrap:wrap">
+          <input id="busFrom" placeholder="From" />
+          <input id="busTo" placeholder="To" />
+          <input id="busDate" type="date" />
+          <input id="busTime" placeholder="Time (e.g., 08:00 AM)" />
+          <input id="busPrice" type="number" placeholder="Price (₹)" />
+          <select id="busSeatsCount">
+            <option>30</option><option>36</option><option>40</option><option>44</option><option>48</option>
+          </select>
+          <button class="btn" id="saveBusBtn">Save Bus</button>
+          <button class="btn ghost" id="clearBusBtn">Clear</button>
+        </div>
+        <input type="hidden" id="editingBusId" />
+        <div class="divider"></div>
+        <div class="kicker">All Buses</div>
+        <div id="adminBusList" class="list" style="margin-top:8px"></div>
 
-            setState(partialState) {
-                this.state = { ...this.state, ...partialState };
-                this.render();
-            }
+        <div class="divider"></div>
+        <div class="kicker">All Bookings</div>
+        <table class="table" id="adminBookingsTable">
+          <thead>
+            <tr><th>PNR</th><th>User</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </aside>
+  </main>
 
-            handleLogin(e) {
-                e.preventDefault();
-                const user = this.state.users.find(u => 
-                    u.username === this.state.loginData.username && 
-                    u.password === this.state.loginData.password
-                );
-                if (user) {
-                    this.setState({ 
-                        currentUser: user, 
-                        showLogin: false, 
-                        activeTab: 'booking' 
-                    });
-                } else {
-                    alert('Invalid credentials!');
-                }
-            }
+<script>
+/* ------------------------
+   LocalStorage persistence
+-------------------------*/
+const DB = {
+  load(key, def){ try { return JSON.parse(localStorage.getItem(key)) ?? def } catch { return def } },
+  save(key, val){ localStorage.setItem(key, JSON.stringify(val)) }
+};
 
-            handleSignup(e) {
-                e.preventDefault();
-                if (this.state.users.some(u => u.username === this.state.signupData.username)) {
-                    alert('Username already exists!');
-                    return;
-                }
-                const newUser = {
-                    id: this.state.users.length + 1,
-                    ...this.state.signupData,
-                    role: 'user'
-                };
-                this.setState({
-                    users: [...this.state.users, newUser]
-                });
-                alert('Account created successfully! Please login.');
-                this.setState({ signupData: { username: '', password: '', name: '' } });
-            }
+// Seed default admin + demo buses if not present
+(function seed(){
+  const users = DB.load('users', []);
+  if(!users.find(u => u.username === 'admin')){
+    users.push({ username:'admin', password:'admin123', role:'admin' });
+    DB.save('users', users);
+  }
+  const buses = DB.load('buses', []);
+  if(buses.length === 0){
+    const today = new Date(); const dstr = today.toISOString().slice(0,10);
+    DB.save('buses', [
+      makeBus('Bhubaneswar','Kolkata', dstr, '08:00 AM', 550, 36),
+      makeBus('Bhubaneswar','Delhi',   dstr, '05:00 PM', 1200, 40),
+    ]);
+  }
+  if(!DB.load('bookings', null)){ DB.save('bookings', []) }
+})();
 
-            handleSeatSelection(seat) {
-                if (seat.isBooked) return;
-                
-                const selectedSeats = this.state.selectedSeats.includes(seat.number) 
-                    ? this.state.selectedSeats.filter(s => s !== seat.number)
-                    : [...this.state.selectedSeats, seat.number];
-                
-                this.setState({ selectedSeats });
-            }
+function makeBus(from,to,date,time,price,count){
+  return {
+    id: crypto.randomUUID(),
+    from, to, date, time, price: Number(price),
+    seats: Array.from({length: Number(count)}, () => 0) // 0=free, 1=booked
+  }
+}
 
-            handleBooking() {
-                if (this.state.selectedSeats.length === 0) {
-                    alert('Please select at least one seat!');
-                    return;
-                }
+function formatINR(n){ return '₹' + Number(n).toLocaleString('en-IN') }
+function qs(s){ return document.querySelector(s) }
+function qsa(s){ return [...document.querySelectorAll(s)] }
 
-                const selectedSeatObjects = this.state.selectedBus.seats.filter(seat => 
-                    this.state.selectedSeats.includes(seat.number)
-                );
-                
-                const totalAmount = selectedSeatObjects.reduce((total, seat) => total + seat.price, 0);
+/* ------------------------
+   Session & Auth
+-------------------------*/
+let session = DB.load('session', null);
 
-                const newBooking = {
-                    id: this.state.bookings.length + 1,
-                    userId: this.state.currentUser.id,
-                    busId: this.state.selectedBus.id,
-                    seatNumbers: this.state.selectedSeats,
-                    seatDetails: selectedSeatObjects.map(seat => ({
-                        number: seat.number,
-                        type: seat.type,
-                        price: seat.price
-                    })),
-                    totalAmount: totalAmount,
-                    bookingDate: new Date().toISOString(),
-                    passengerName: this.state.currentUser.name
-                };
+function setSession(s){ session = s; DB.save('session', s); renderSession(); renderMyBookings(); }
+function logout(){ setSession(null) }
 
-                this.setState({
-                    bookings: [...this.state.bookings, newBooking],
-                    selectedSeats: []
-                });
-                alert(`Booking confirmed! Total: ₹${totalAmount}`);
-            }
+function renderSession(){
+  const sa = qs('#sessionArea');
+  sa.innerHTML = '';
+  const row = document.createElement('div'); row.className='row'; row.style.gap='8px';
+  if(session){
+    row.innerHTML = \`
+      <span class="pill">Signed in: \${session.username} \${session.role==='admin'?'(Admin)':''}</span>
+      <button class="btn ghost" id="logoutBtn">Logout</button>
+    \`;
+  }else{
+    row.innerHTML = '<span class="small">Not signed in</span>';
+  }
+  sa.appendChild(row);
+  const btn = qs('#logoutBtn'); if(btn) btn.onclick = logout;
 
-            updateSeatPrices() {
-                this.state.buses = this.state.buses.map(bus => ({
-                    ...bus,
-                    seatPricing: { ...this.state.seatManagement.prices },
-                    seats: bus.seats.map(seat => {
-                        let price = this.state.seatManagement.prices.lower;
-                        if (seat.type === 'upper') {
-                            price = this.state.seatManagement.prices.upper;
-                        } else if (seat.type === 'sleeper') {
-                            price = this.state.seatManagement.prices.sleeper;
-                        }
-                        return { ...seat, price };
-                    })
-                }));
-                this.setState({ seatManagement: { ...this.state.seatManagement, editing: false } });
-            }
+  // toggle admin panel
+  qs('#adminPanel').style.display = (session && session.role==='admin') ? 'block':'none';
+}
 
-            updateTravelDetails() {
-                this.state.buses = this.state.buses.map(bus => ({
-                    ...bus,
-                    departureLocation: this.state.travelDetails.details.departureLocation,
-                    arrivalLocation: this.state.travelDetails.details.arrivalLocation,
-                    departureTime: this.state.travelDetails.details.departureTime,
-                    arrivalTime: this.state.travelDetails.details.arrivalTime,
-                    duration: this.state.travelDetails.details.duration,
-                    amenities: [...this.state.travelDetails.details.amenities],
-                    rules: [...this.state.travelDetails.details.rules]
-                }));
-                this.setState({ travelDetails: { ...this.state.travelDetails, editing: false } });
-            }
+function switchTab(tabId){
+  qsa('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tabId));
+  ['loginTab','signupTab','adminTab'].forEach(id => qs('#'+id).style.display = (id===tabId)?'block':'none');
+}
+qsa('.tab').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
 
-            calculateBusRevenue(bus) {
-                const busBookings = this.state.bookings.filter(booking => booking.busId === bus.id);
-                return busBookings.reduce((total, booking) => total + booking.totalAmount, 0);
-            }
+// Login
+qs('#loginBtn').onclick = () => {
+  const u = qs('#loginUser').value.trim();
+  const p = qs('#loginPass').value;
+  const users = DB.load('users', []);
+  const found = users.find(x => x.username===u && x.password===p && x.role!=='admin');
+  if(found){ setSession({ username:u, role:'user' }); alert('Welcome ' + u) }
+  else alert('Invalid credentials (user). Sign up if new.');
+};
 
-            calculateBusExpenses(bus) {
-                return (bus.expenses || []).reduce((total, expense) => total + expense.amount, 0);
-            }
+// Signup
+qs('#signupBtn').onclick = () => {
+  const u = qs('#suUser').value.trim();
+  const p = qs('#suPass').value;
+  if(!u || !p){ alert('Enter username & password'); return }
+  const users = DB.load('users', []);
+  if(users.find(x => x.username===u)){ alert('Username already exists'); return }
+  users.push({ username:u, password:p, role:'user' });
+  DB.save('users', users);
+  alert('Account created. You can login now.');
+  switchTab('loginTab');
+};
 
-            calculateBusProfit(bus) {
-                return this.calculateBusRevenue(bus) - this.calculateBusExpenses(bus);
-            }
+// Admin login/logout
+qs('#adminLoginBtn').onclick = () => {
+  const u = qs('#adminUser').value.trim() || 'admin';
+  const p = qs('#adminPass').value || 'admin123';
+  const users = DB.load('users', []);
+  const found = users.find(x => x.username===u && x.password===p && x.role==='admin');
+  if(found){ setSession({ username:u, role:'admin' }); alert('Admin logged in') }
+  else alert('Wrong admin credentials');
+};
+qs('#adminLogoutBtn').onclick = logout;
 
-            getSeatClass(seat) {
-                if (seat.isBooked) return 'seat booked';
-                if (this.state.selectedSeats.includes(seat.number)) return 'seat selected';
-                if (seat.type === 'sleeper') return 'seat sleeper';
-                if (seat.type === 'lower') return 'seat lower';
-                return 'seat available';
-            }
+/* ------------------------
+   Search & List Buses
+-------------------------*/
+function renderBuses(filter=null){
+  const buses = DB.load('buses', []);
+  const list = qs('#busList'); list.innerHTML='';
+  const filtered = (filter? buses.filter(filter) : buses);
+  qs('#busCountPill').textContent = \`\${filtered.length} buses\`;
 
-            getSeatPrice(seat) {
-                return seat.price;
-            }
+  filtered.forEach(b => {
+    const li = document.createElement('div'); li.className='list-item';
+    const filled = b.seats.filter(s=>s===1).length;
+    li.innerHTML = \`
+      <div>
+        <div style="font-weight:700">\${b.from} → \${b.to}</div>
+        <div class="small">\${b.date} • \${b.time}</div>
+        <div class="small">\${formatINR(b.price)} per seat • \${b.seats.length-filled} free / \${b.seats.length}</div>
+      </div>
+      <div class="row">
+        <button class="btn" data-act="select" data-id="\${b.id}">Select</button>
+      </div>
+    \`;
+    list.appendChild(li);
+  });
 
-            renderLogin() {
-                return `
-                <div class="min-h-screen bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center p-4">
-                    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-                        <div class="text-center mb-8">
-                            <svg class="w-16 h-16 mx-auto text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><circle cx="12" cy="14" r="2"></circle><path d="M2 7h20"></path><path d="M16 3v4"></path><path d="M8 3v4"></path></svg>
-                            <h1 class="text-3xl font-bold text-gray-800">Druthi Rath Booking</h1>
-                        </div>
+  // Hook select buttons
+  list.querySelectorAll('button[data-act=\"select\"]').forEach(btn => {
+    btn.onclick = () => openSeatMap(btn.dataset.id);
+  });
+}
+renderBuses();
 
-                        <div class="space-y-4 mb-6">
-                            <button class="w-full py-2 px-4 rounded-lg transition-all ${this.state.activeTab === 'login' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}" onclick="app.setState({activeTab: 'login'})">
-                                Login
-                            </button>
-                            <button class="w-full py-2 px-4 rounded-lg transition-all ${this.state.activeTab === 'signup' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}" onclick="app.setState({activeTab: 'signup'})">
-                                Sign Up
-                            </button>
-                        </div>
+qs('#searchBtn').onclick = () => {
+  const f = qs('#fromInp').value.trim().toLowerCase();
+  const t = qs('#toInp').value.trim().toLowerCase();
+  const d = qs('#dateInp').value;
+  renderBuses(b => {
+    return (!f || b.from.toLowerCase().includes(f)) &&
+           (!t || b.to.toLowerCase().includes(t)) &&
+           (!d || b.date===d);
+  });
+};
+qs('#resetBtn').onclick = () => { qs('#fromInp').value=''; qs('#toInp').value=''; qs('#dateInp').value=''; renderBuses(); };
 
-                        ${this.state.activeTab === 'login' ? this.renderLoginForm() : this.renderSignupForm()}
-                    </div>
-                </div>
-                `;
-            }
+/* ------------------------
+   Seat Selection & Payment
+-------------------------*/
+let currentBusId = null;
+let selectedSeats = [];
 
-            renderLoginForm() {
-                return `
-                <form onsubmit="app.handleLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                        <input
-                            type="text"
-                            value="${this.state.loginData.username}"
-                            oninput="app.setState({loginData: {...app.state.loginData, username: this.value}})"
-                            class="form-input"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <div class="relative">
-                            <input
-                                type="${this.state.showPassword ? 'text' : 'password'}"
-                                value="${this.state.loginData.password}"
-                                oninput="app.setState({loginData: {...app.state.loginData, password: this.value}})"
-                                class="form-input pr-10"
-                                required
-                            />
-                            <button
-                                type="button"
-                                onclick="app.setState({showPassword: !app.state.showPassword})"
-                                class="absolute right-3 top-3 text-gray-400"
-                            >
-                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </button>
-                        </div>
-                    </div>
-                    <button
-                        type="submit"
-                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Login
-                    </button>
-                    <div class="text-sm text-gray-600 text-center">
-                        Demo: admin/admin123 or user1/pass123
-                    </div>
-                </form>
-                `;
-            }
+function openSeatMap(busId){
+  const buses = DB.load('buses', []);
+  const b = buses.find(x => x.id===busId);
+  if(!b){ alert('Bus not found'); return }
+  currentBusId = busId;
+  selectedSeats = [];
+  qs('#seatCard').style.display = 'block';
+  qs('#seatTitle').textContent = \`Select Seats — \${b.from} → \${b.to} (\${b.date} • \${b.time})\`;
+  renderSeatGrid(b);
+  updateFare();
+  // hide payment if open
+  qs('#paymentCard').style.display='none';
+}
 
-            renderSignupForm() {
-                return `
-                <form onsubmit="app.handleSignup(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                        <input
-                            type="text"
-                            value="${this.state.signupData.name}"
-                            oninput="app.setState({signupData: {...app.state.signupData, name: this.value}})"
-                            class="form-input"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                        <input
-                            type="text"
-                            value="${this.state.signupData.username}"
-                            oninput="app.setState({signupData: {...app.state.signupData, username: this.value}})"
-                            class="form-input"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input
-                            type="password"
-                            value="${this.state.signupData.password}"
-                            oninput="app.setState({signupData: {...app.state.signupData, password: this.value}})"
-                            class="form-input"
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                        Create Account
-                    </button>
-                </form>
-                `;
-            }
-
-            renderHeader() {
-                return `
-                <header class="bg-white shadow-lg">
-                    <div class="max-w-7xl mx-auto px-4 py-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <svg class="w-8 h-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><circle cx="12" cy="14" r="2"></circle><path d="M2 7h20"></path><path d="M16 3v4"></path><path d="M8 3v4"></path></svg>
-                                <h1 class="text-2xl font-bold text-gray-800">Druthi Rath Booking System</h1>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="text-gray-600">Welcome, ${this.state.currentUser.name}</span>
-                                <span class="px-3 py-1 rounded-full text-sm ${this.state.currentUser.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}">
-                                    ${this.state.currentUser.role.toUpperCase()}
-                                </span>
-                                <button onclick="app.setState({currentUser: null, showLogin: true});" class="flex items-center space-x-2 text-gray-600 hover:text-red-600">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                                    <span>Logout</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-                `;
-            }
-
-            renderNavigation() {
-                return `
-                <nav class="bg-blue-600 text-white">
-                    <div class="max-w-7xl mx-auto px-4">
-                        <div class="flex space-x-8">
-                            <button onclick="app.setState({activeTab: 'booking'})" class="py-4 px-2 border-b-2 transition-colors ${this.state.activeTab === 'booking' ? 'border-white' : 'border-transparent hover:border-blue-200'}">
-                                <div class="flex items-center space-x-2">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><circle cx="12" cy="14" r="2"></circle><path d="M2 7h20"></path><path d="M16 3v4"></path><path d="M8 3v4"></path></svg>
-                                    <span>Book Seats</span>
-                                </div>
-                            </button>
-                            ${this.state.currentUser.role === 'admin' ? `
-                            <button onclick="app.setState({activeTab: 'revenue'})" class="py-4 px-2 border-b-2 transition-colors ${this.state.activeTab === 'revenue' ? 'border-white' : 'border-transparent hover:border-blue-200'}">
-                                <div class="flex items-center space-x-2">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                    <span>Revenue & Expenses</span>
-                                </div>
-                            </button>
-                            <button onclick="app.setState({activeTab: 'users'})" class="py-4 px-2 border-b-2 transition-colors ${this.state.activeTab === 'users' ? 'border-white' : 'border-transparent hover:border-blue-200'}">
-                                <div class="flex items-center space-x-2">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                    <span>All Users</span>
-                                </div>
-                            </button>
-                            <button onclick="app.setState({activeTab: 'bookings'})" class="py-4 px-2 border-b-2 transition-colors ${this.state.activeTab === 'bookings' ? 'border-white' : 'border-transparent hover:border-blue-200'}">
-                                <div class="flex items-center space-x-2">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                                    <span>All Bookings</span>
-                                </div>
-                            </button>
-                            <button onclick="app.setState({activeTab: 'seat-pricing'})" class="py-4 px-2 border-b-2 transition-colors ${this.state.activeTab === 'seat-pricing' ? 'border-white' : 'border-transparent hover:border-blue-200'}">
-                                <div class="flex items-center space-x-2">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                                    <span>Seat Pricing</span>
-                                </div>
-                            </button>
-                            <button onclick="app.setState({activeTab: 'travel-details'})" class="py-4 px-2 border-b-2 transition-colors ${this.state.activeTab === 'travel-details' ? 'border-white' : 'border-transparent hover:border-blue-200'}">
-                                <div class="flex items-center space-x-2">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                    <span>Travel Details</span>
-                                </div>
-                            </button>
-                            ` : ''}
-                        </div>
-                    </div>
-                </nav>
-                `;
-            }
-
-            renderBookingTab() {
-                const bus = this.state.buses[0];
-                return `
-                <div class="space-y-8">
-                    <h2 class="text-3xl font-bold text-gray-800">Available Buses</h2>
-                    
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-bold text-gray-800">${bus.name}</h3>
-                            <span class="text-2xl font-bold text-blue-600">From ₹${bus.seatPricing.lower}</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Route Information</h4>
-                                <div class="space-y-2 text-gray-600">
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                        <span><strong>From:</strong> ${bus.departureLocation}</span>
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                        <span><strong>To:</strong> ${bus.arrivalLocation}</span>
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                        <span><strong>Departure:</strong> ${bus.departureTime}</span>
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                        <span><strong>Arrival:</strong> ${bus.arrivalTime}</span>
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                        <span><strong>Duration:</strong> ${bus.duration}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Amenities</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    ${bus.amenities.map(amenity => `
-                                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">${amenity}</span>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button onclick="app.setState({selectedBus: app.state.buses[0]})" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                            View Seat Layout
-                        </button>
-                    </div>
-
-                    ${this.state.selectedBus ? this.renderSeatSelection() : ''}
-                </div>
-                `;
-            }
-
-            renderSeatSelection() {
-                const bus = this.state.selectedBus;
-                const seatRows = [];
-                let currentRow = [];
-                
-                // Group seats by row based on the pattern in the PDF
-                bus.seats.forEach((seat, index) => {
-                    currentRow.push(seat);
-                    if (currentRow.length === 5 || index === bus.seats.length - 1) {
-                        seatRows.push([...currentRow]);
-                        currentRow = [];
-                    }
-                });
-
-                return `
-                <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-2xl font-bold text-gray-800">Select Seats - ${bus.name}</h3>
-                        <button onclick="app.setState({selectedBus: null, selectedSeats: []})" class="text-gray-500 hover:text-gray-700">
-                            ✕
-                        </button>
-                    </div>
-
-                    <div class="mb-6">
-                        <div class="flex flex-wrap items-center gap-6 text-sm mb-4">
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #d1fae5; border-color: #99f6e4;"></div>
-                                <span>Upper Seat (₹${bus.seatPricing.upper})</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #fde68a; border-color: #fbbf24;"></div>
-                                <span>Lower Seat (₹${bus.seatPricing.lower})</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #c7d2fe; border-color: #818cf8;"></div>
-                                <span>Sleeper Seat (₹${bus.seatPricing.sleeper})</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #ef4444; border-color: #dc2626;"></div>
-                                <span>Booked</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #3b82f6; border-color: #2563eb;"></div>
-                                <span>Selected</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <div class="bg-gray-800 text-white text-center py-2 rounded-t-lg mb-4 font-bold">
-                            DRIVER
-                        </div>
-                        
-                        <div class="flex flex-col items-center space-y-2">
-                            ${seatRows.map((row, rowIndex) => `
-                            <div class="flex space-x-2">
-                                ${row.map(seat => `
-                                <div
-                                    key="${seat.id}"
-                                    onclick="app.handleSeatSelection(${JSON.stringify(seat)})"
-                                    class="${this.getSeatClass(seat)}"
-                                    title="${seat.type.charAt(0).toUpperCase() + seat.type.slice(1)} Seat - ₹${this.getSeatPrice(seat)}"
-                                >
-                                    ${seat.number}
-                                </div>
-                                `).join('')}
-                            </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    ${this.state.selectedSeats.length > 0 ? `
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <div class="mb-4">
-                            <p class="font-semibold">Selected Seats:</p>
-                            <div class="flex flex-wrap gap-2 mt-2">
-                                ${this.state.selectedSeats.map(seatNum => {
-                                    const seat = bus.seats.find(s => s.number === seatNum);
-                                    return `<span class="bg-blue-200 px-2 py-1 rounded text-sm">Seat ${seatNum} (₹${seat.price})</span>`;
-                                }).join('')}
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-lg font-bold text-blue-600">
-                                    Total: ₹${this.state.selectedSeats.reduce((total, seatNum) => {
-                                        const seat = bus.seats.find(s => s.number === seatNum);
-                                        return total + seat.price;
-                                    }, 0)}
-                                </p>
-                            </div>
-                            <button onclick="app.handleBooking()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
-                                Confirm Booking
-                            </button>
-                        </div>
-                    </div>
-                    ` : ''}
-                </div>
-                `;
-            }
-
-            renderTravelDetailsTab() {
-                if (this.state.currentUser.role !== 'admin') return '';
-                
-                const bus = this.state.buses[0];
-                return `
-                <div class="space-y-8">
-                    <h2 class="text-3xl font-bold text-gray-800">Travel Details Management</h2>
-                    
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-bold text-gray-800">Druthi Rath Express - Travel Details</h3>
-                            ${this.state.travelDetails.editing ? `
-                            <div>
-                                <button onclick="app.updateTravelDetails()" class="bg-green-600 text-white px-4 py-2 rounded-lg mr-2">
-                                    Save Changes
-                                </button>
-                                <button onclick="app.setState({travelDetails: {...app.state.travelDetails, editing: false}})" class="bg-gray-500 text-white px-4 py-2 rounded-lg">
-                                    Cancel
-                                </button>
-                            </div>
-                            ` : `
-                            <button onclick="app.setState({travelDetails: {...app.state.travelDetails, editing: true}})" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-                                Edit Details
-                            </button>
-                            `}
-                        </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div>
-                                <h4 class="text-lg font-semibold mb-4">Route Information</h4>
-                                
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Departure Location</label>
-                                        ${this.state.travelDetails.editing ? `
-                                        <input 
-                                            type="text" 
-                                            value="${this.state.travelDetails.details.departureLocation}"
-                                            oninput="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, departureLocation: this.value}}})"
-                                            class="form-input"
-                                        />
-                                        ` : `
-                                        <p class="p-2 bg-gray-50 rounded">${bus.departureLocation}</p>
-                                        `}
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Arrival Location</label>
-                                        ${this.state.travelDetails.editing ? `
-                                        <input 
-                                            type="text" 
-                                            value="${this.state.travelDetails.details.arrivalLocation}"
-                                            oninput="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, arrivalLocation: this.value}}})"
-                                            class="form-input"
-                                        />
-                                        ` : `
-                                        <p class="p-2 bg-gray-50 rounded">${bus.arrivalLocation}</p>
-                                        `}
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Departure Time</label>
-                                            ${this.state.travelDetails.editing ? `
-                                            <input 
-                                                type="text" 
-                                                value="${this.state.travelDetails.details.departureTime}"
-                                                oninput="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, departureTime: this.value}}})"
-                                                class="form-input"
-                                                placeholder="HH:MM"
-                                            />
-                                            ` : `
-                                            <p class="p-2 bg-gray-50 rounded">${bus.departureTime}</p>
-                                            `}
-                                        </div>
-                                        
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Arrival Time</label>
-                                            ${this.state.travelDetails.editing ? `
-                                            <input 
-                                                type="text" 
-                                                value="${this.state.travelDetails.details.arrivalTime}"
-                                                oninput="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, arrivalTime: this.value}}})"
-                                                class="form-input"
-                                                placeholder="HH:MM"
-                                            />
-                                            ` : `
-                                            <p class="p-2 bg-gray-50 rounded">${bus.arrivalTime}</p>
-                                            `}
-                                        </div>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Journey Duration</label>
-                                        ${this.state.travelDetails.editing ? `
-                                        <input 
-                                            type="text" 
-                                            value="${this.state.travelDetails.details.duration}"
-                                            oninput="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, duration: this.value}}})"
-                                            class="form-input"
-                                        />
-                                        ` : `
-                                        <p class="p-2 bg-gray-50 rounded">${bus.duration}</p>
-                                        `}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h4 class="text-lg font-semibold mb-4">Amenities & Rules</h4>
-                                
-                                <div class="mb-6">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
-                                    ${this.state.travelDetails.editing ? `
-                                    <div class="space-y-2">
-                                        ${bus.amenities.map((amenity, index) => `
-                                        <div class="flex items-center">
-                                            <input 
-                                                type="text" 
-                                                value="${amenity}"
-                                                oninput="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, amenities: app.state.travelDetails.details.amenities.map((a,i) => i === ${index} ? this.value : a)}}})"
-                                                class="form-input text-sm"
-                                            />
-                                            <button onclick="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, amenities: app.state.travelDetails.details.amenities.filter((a,i) => i !== ${index})}}})" class="ml-2 text-red-500">
-                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                            </button>
-                                        </div>
-                                        `).join('')}
-                                        <button onclick="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, amenities: [...app.state.travelDetails.details.amenities, 'New Amenity']}}})" class="text-green-500 text-sm">
-                                            + Add Amenity
-                                        </button>
-                                    </div>
-                                    ` : `
-                                    <div class="flex flex-wrap gap-2">
-                                        ${bus.amenities.map(amenity => `
-                                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">${amenity}</span>
-                                        `).join('')}
-                                    </div>
-                                    `}
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Travel Rules</label>
-                                    ${this.state.travelDetails.editing ? `
-                                    <div class="space-y-2 max-h-60 overflow-y-auto">
-                                        ${bus.rules.map((rule, index) => `
-                                        <div class="flex items-center">
-                                            <input 
-                                                type="text" 
-                                                value="${rule}"
-                                                oninput="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, rules: app.state.travelDetails.details.rules.map((r,i) => i === ${index} ? this.value : r)}}})"
-                                                class="form-input text-sm"
-                                            />
-                                            <button onclick="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, rules: app.state.travelDetails.details.rules.filter((r,i) => i !== ${index})}}})" class="ml-2 text-red-500">
-                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                            </button>
-                                        </div>
-                                        `).join('')}
-                                        <button onclick="app.setState({travelDetails: {...app.state.travelDetails, details: {...app.state.travelDetails.details, rules: [...app.state.travelDetails.details.rules, 'New Rule']}}})" class="text-green-500 text-sm">
-                                            + Add Rule
-                                        </button>
-                                    </div>
-                                    ` : `
-                                    <div class="space-y-2">
-                                        ${bus.rules.map(rule => `
-                                        <div class="flex items-start">
-                                            <svg class="w-4 h-4 text-green-500 mt-1 mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                            <span class="text-sm">${rule}</span>
-                                        </div>
-                                        `).join('')}
-                                    </div>
-                                    `}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
-            }
-
-            renderSeatPricingTab() {
-                if (this.state.currentUser.role !== 'admin') return '';
-                
-                return `
-                <div class="space-y-8">
-                    <h2 class="text-3xl font-bold text-gray-800">Seat Pricing Management</h2>
-                    
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-bold text-gray-800">Druthi Rath Express - Seat Pricing</h3>
-                            ${this.state.seatManagement.editing ? `
-                            <div>
-                                <button onclick="app.updateSeatPrices()" class="bg-green-600 text-white px-4 py-2 rounded-lg mr-2">
-                                    Save Changes
-                                </button>
-                                <button onclick="app.setState({seatManagement: {...app.state.seatManagement, editing: false}})" class="bg-gray-500 text-white px-4 py-2 rounded-lg">
-                                    Cancel
-                                </button>
-                            </div>
-                            ` : `
-                            <button onclick="app.setState({seatManagement: {...app.state.seatManagement, editing: true}})" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-                                Edit Prices
-                            </button>
-                            `}
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="p-4 border rounded-lg ${this.state.seatManagement.editing ? 'bg-yellow-50' : ''}">
-                                <div class="flex items-center mb-4">
-                                    <div class="w-4 h-4 bg-fde68a border-2 border-fbbf24 rounded mr-2"></div>
-                                    <h4 class="font-bold text-lg">Lower Seats</h4>
-                                </div>
-                                ${this.state.seatManagement.editing ? `
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
-                                    <input 
-                                        type="number" 
-                                        value="${this.state.seatManagement.prices.lower}"
-                                        oninput="app.setState({seatManagement: {...app.state.seatManagement, prices: {...app.state.seatManagement.prices, lower: parseInt(this.value)}}})"
-                                        class="w-full p-2 border border-gray-300 rounded"
-                                        min="100"
-                                        max="2000"
-                                    />
-                                </div>
-                                ` : `
-                                <div>
-                                    <p class="text-2xl font-bold text-green-600">₹${this.state.buses[0].seatPricing.lower}</p>
-                                    <p class="text-sm text-gray-600">Base price for lower berths</p>
-                                </div>
-                                `}
-                            </div>
-                            
-                            <div class="p-4 border rounded-lg ${this.state.seatManagement.editing ? 'bg-yellow-50' : ''}">
-                                <div class="flex items-center mb-4">
-                                    <div class="w-4 h-4 bg-d1fae5 border-2 border-99f6e4 rounded mr-2"></div>
-                                    <h4 class="font-bold text-lg">Upper Seats</h4>
-                                </div>
-                                ${this.state.seatManagement.editing ? `
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
-                                    <input 
-                                        type="number" 
-                                        value="${this.state.seatManagement.prices.upper}"
-                                        oninput="app.setState({seatManagement: {...app.state.seatManagement, prices: {...app.state.seatManagement.prices, upper: parseInt(this.value)}}})"
-                                        class="w-full p-2 border border-gray-300 rounded"
-                                        min="100"
-                                        max="2000"
-                                    />
-                                </div>
-                                ` : `
-                                <div>
-                                    <p class="text-2xl font-bold text-green-600">₹${this.state.buses[0].seatPricing.upper}</p>
-                                    <p class="text-sm text-gray-600">Standard upper berths</p>
-                                </div>
-                                `}
-                            </div>
-                            
-                            <div class="p-4 border rounded-lg ${this.state.seatManagement.editing ? 'bg-yellow-50' : ''}">
-                                <div class="flex items-center mb-4">
-                                    <div class="w-4 h-4 bg-c7d2fe border-2 border-818cf8 rounded mr-2"></div>
-                                    <h4 class="font-bold text-lg">Sleeper Seats</h4>
-                                </div>
-                                ${this.state.seatManagement.editing ? `
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
-                                    <input 
-                                        type="number" 
-                                        value="${this.state.seatManagement.prices.sleeper}"
-                                        oninput="app.setState({seatManagement: {...app.state.seatManagement, prices: {...app.state.seatManagement.prices, sleeper: parseInt(this.value)}}})"
-                                        class="w-full p-2 border border-gray-300 rounded"
-                                        min="100"
-                                        max="3000"
-                                    />
-                                </div>
-                                ` : `
-                                <div>
-                                    <p class="text-2xl font-bold text-green-600">₹${this.state.buses[0].seatPricing.sleeper}</p>
-                                    <p class="text-sm text-gray-600">Premium sleeper berths</p>
-                                </div>
-                                `}
-                            </div>
-                        </div>
-                        
-                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                            <h4 class="font-bold mb-3">Seat Configuration</h4>
-                            <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm">
-                                <div class="font-semibold">Lower Seats:</div>
-                                <div>${bus.seats.filter(s => s.type === 'lower').length} seats (SL1A1-SL5A10)</div>
-                                <div class="font-semibold">Upper Seats:</div>
-                                <div>${bus.seats.filter(s => s.type === 'upper').length} seats (B1-C10)</div>
-                                <div class="font-semibold">Sleeper Seats:</div>
-                                <div>${bus.seats.filter(s => s.type === 'sleeper').length} seats (SP1-SR5)</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
-            }
-
-            renderRevenueTab() {
-                if (this.state.currentUser.role !== 'admin') return '';
-                
-                const bus = this.state.buses[0];
-                const revenue = this.calculateBusRevenue(bus);
-                const expenses = this.calculateBusExpenses(bus);
-                const profit = revenue - expenses;
-                
-                return `
-                <div class="space-y-8">
-                    <h2 class="text-3xl font-bold text-gray-800">Revenue & Expense Management</h2>
-                    
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6">${bus.name} - ${bus.route}</h3>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div class="bg-green-100 p-4 rounded-lg text-center">
-                                <h4 class="text-lg font-semibold text-green-800">Revenue</h4>
-                                <p class="text-2xl font-bold text-green-600">₹${revenue}</p>
-                                <p class="text-sm text-gray-600">
-                                    ${this.state.bookings.filter(b => b.busId === bus.id).length} bookings
-                                </p>
-                            </div>
-                            <div class="bg-red-100 p-4 rounded-lg text-center">
-                                <h4 class="text-lg font-semibold text-red-800">Expenses</h4>
-                                <p class="text-2xl font-bold text-red-600">₹${expenses}</p>
-                                <p class="text-sm text-gray-600">
-                                    ${bus.expenses?.length || 0} expense items
-                                </p>
-                            </div>
-                            <div class="bg-blue-100 p-4 rounded-lg text-center">
-                                <h4 class="text-lg font-semibold text-blue-800">Profit</h4>
-                                <p class="text-2xl font-bold ${profit >= 0 ? 'text-green-600' : 'text-red-600'}">
-                                    ₹${profit}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="text-lg font-semibold mb-4">Seat Collection Details</h4>
-                                <div class="space-y-2">
-                                    ${this.state.bookings.filter(booking => booking.busId === bus.id).map(booking => `
-                                    <div key="${booking.id}" class="flex justify-between items-center bg-gray-50 p-3 rounded">
-                                        <div>
-                                            <p class="font-medium">${booking.passengerName}</p>
-                                            <p class="text-sm text-gray-600">Seats: ${booking.seatNumbers.join(', ')}</p>
-                                        </div>
-                                        <p class="font-bold text-green-600">₹${booking.totalAmount}</p>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h4 class="text-lg font-semibold mb-4">Expense Breakdown</h4>
-                                <div class="space-y-2">
-                                    ${(bus.expenses || []).map(expense => `
-                                    <div key="${expense.id}" class="flex justify-between items-center bg-gray-50 p-3 rounded">
-                                        <div>
-                                            <p class="font-medium">${expense.type}</p>
-                                            <p class="text-sm text-gray-600">${expense.description}</p>
-                                        </div>
-                                        <p class="font-bold text-red-600">₹${expense.amount}</p>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
-            }
-
-            renderUsersTab() {
-                if (this.state.currentUser.role !== 'admin') return '';
-                
-                return `
-                <div class="space-y-8">
-                    <h2 class="text-3xl font-bold text-gray-800">All Users</h2>
-                    
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bookings</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                ${this.state.users.map(user => {
-                                    const userBookings = this.state.bookings.filter(booking => booking.userId === user.id);
-                                    const totalSpent = userBookings.reduce((total, booking) => total + booking.totalAmount, 0);
-                                    return `
-                                    <tr key="${user.id}">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">${user.name}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">${user.username}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full ${user.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}">
-                                                ${user.role.toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            ${userBookings.length}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
-                                            ₹${totalSpent}
-                                        </td>
-                                    </tr>
-                                    `;
-                                }).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                `;
-            }
-
-            renderBookingsTab() {
-                if (this.state.currentUser.role !== 'admin') return '';
-                
-                return `
-                <div class="space-y-8">
-                    <h2 class="text-3xl font-bold text-gray-800">All Bookings</h2>
-                    
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Passenger</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bus</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seats</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                ${this.state.bookings.map(booking => {
-                                    const bus = this.state.buses.find(b => b.id === booking.busId);
-                                    const user = this.state.users.find(u => u.id === booking.userId);
-                                    return `
-                                    <tr key="${booking.id}">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            #${booking.id}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            ${user?.name || 'Unknown'}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">${bus?.name}</div>
-                                            <div class="text-sm text-gray-500">${bus?.route}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            ${booking.seatNumbers.join(', ')}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
-                                            ₹${booking.totalAmount}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            ${new Date(booking.bookingDate).toLocaleDateString()}
-                                        </td>
-                                    </tr>
-                                    `;
-                                }).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                `;
-            }
-
-            renderMainContent() {
-                if (this.state.activeTab === 'booking') {
-                    return this.renderBookingTab();
-                } else if (this.state.activeTab === 'revenue' && this.state.currentUser.role === 'admin') {
-                    return this.renderRevenueTab();
-                } else if (this.state.activeTab === 'users' && this.state.currentUser.role === 'admin') {
-                    return this.renderUsersTab();
-                } else if (this.state.activeTab === 'bookings' && this.state.currentUser.role === 'admin') {
-                    return this.renderBookingsTab();
-                } else if (this.state.activeTab === 'seat-pricing' && this.state.currentUser.role === 'admin') {
-                    return this.renderSeatPricingTab();
-                } else if (this.state.activeTab === 'travel-details' && this.state.currentUser.role === 'admin') {
-                    return this.renderTravelDetailsTab();
-                }
-                return '';
-            }
-
-            render() {
-                const app = document.getElementById('app');
-                app.innerHTML = this.state.showLogin 
-                    ? this.renderLogin() 
-                    : `
-                <div class="min-h-screen bg-gray-100">
-                    ${this.renderHeader()}
-                    ${this.renderNavigation()}
-                    <main class="max-w-7xl mx-auto px-4 py-8">
-                        ${this.renderMainContent()}
-                    </main>
-                </div>
-                `;
-            }
+function renderSeatGrid(bus){
+  const seatGrid = qs('#seatGrid'); seatGrid.innerHTML = '';
+  // render seat buttons
+  bus.seats.forEach((state, idx) => {
+    const s = document.createElement('div'); s.className='seat';
+    s.textContent = idx+1;
+    if(state===1) s.classList.add('booked');
+    else {
+      const sel = selectedSeats.includes(idx);
+      s.classList.add(sel?'selected':'free');
+      s.onclick = () => {
+        if(sel){
+          selectedSeats = selectedSeats.filter(i => i!==idx);
+        }else{
+          selectedSeats.push(idx);
         }
+        renderSeatGrid(bus);
+        updateFare();
+      };
+    }
+    seatGrid.appendChild(s);
+    // add aisle after two columns optionally
+  });
+}
 
-        // Initialize the app when the page loads
-        let app;
-        document.addEventListener('DOMContentLoaded', () => {
-            app = new BusBookingApp();
-        });
-    </script>
+function updateFare(){
+  const buses = DB.load('buses', []);
+  const bus = buses.find(x => x.id===currentBusId);
+  const seatsStr = selectedSeats.length ? selectedSeats.map(i=>i+1).join(', ') : 'None';
+  qs('#selSeats').textContent = seatsStr;
+  qs('#totalFare').textContent = formatINR(selectedSeats.length * (bus?bus.price:0));
+  qs('#payBtn').disabled = !(session && session.role==='user' && selectedSeats.length>0);
+}
+qs('#payBtn').onclick = () => {
+  if(!session){ alert('Please login as user first.'); return }
+  qs('#paymentCard').style.display = 'block';
+  qs('#payRef').value='';
+};
+
+qs('#cancelPayBtn').onclick = () => { qs('#paymentCard').style.display='none' };
+
+qs('#confirmPayBtn').onclick = () => {
+  if(!session){ alert('Please login.'); return }
+  const method = qs('#payMethod').value;
+  const ref = qs('#payRef').value.trim() || '(demo)';
+  const buses = DB.load('buses', []);
+  const bus = buses.find(x => x.id===currentBusId);
+  if(!bus){ alert('Bus missing'); return }
+  if(selectedSeats.some(i => bus.seats[i]===1)){
+    alert('Some seats just got booked. Please re-select.'); openSeatMap(currentBusId); return;
+  }
+  // mark seats booked
+  selectedSeats.forEach(i => bus.seats[i]=1);
+  DB.save('buses', buses);
+
+  const amount = selectedSeats.length * bus.price;
+  const pnr = 'PNR' + Math.floor(100000 + Math.random()*900000);
+  const bookings = DB.load('bookings', []);
+  bookings.push({
+    pnr, user: session.username, busId: bus.id,
+    route: bus.from+' → '+bus.to, date: bus.date, time: bus.time,
+    seats: selectedSeats.map(i=>i+1), amount, method, ref, ts: Date.now()
+  });
+  DB.save('bookings', bookings);
+
+  alert('Payment successful! Your PNR: ' + pnr);
+  selectedSeats = [];
+  qs('#paymentCard').style.display='none';
+  openSeatMap(bus.id);
+  renderBuses();
+  renderMyBookings();
+  renderAdminBookings();
+};
+
+/* ------------------------
+   My Bookings (user)
+-------------------------*/
+function renderMyBookings(){
+  const card = qs('#myBookingsCard');
+  const tbody = qs('#myBookingsTable tbody'); tbody.innerHTML='';
+  if(!(session && session.role==='user')){ card.style.display='none'; return }
+  const bookings = DB.load('bookings', []).filter(b => b.user===session.username);
+  bookings.sort((a,b)=>b.ts-a.ts);
+  bookings.forEach(b => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = \`<td>\${b.pnr}</td><td>\${b.route}</td><td>\${b.date}</td><td>\${b.time}</td><td>\${b.seats.join(', ')}</td><td>\${formatINR(b.amount)}</td><td>CONFIRMED</td>\`;
+    tbody.appendChild(tr);
+  });
+  card.style.display='block';
+}
+
+/* ------------------------
+   Admin: Buses & Bookings
+-------------------------*/
+function renderAdminBuses(){
+  const wrap = qs('#adminBusList'); wrap.innerHTML='';
+  const buses = DB.load('buses', []);
+  buses.forEach(b => {
+    const filled = b.seats.filter(s=>s===1).length;
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = \`
+      <div>
+        <div style="font-weight:700">\${b.from} → \${b.to}</div>
+        <div class="small">\${b.date} • \${b.time} • \${b.seats.length} seats</div>
+        <div class="small">Booked: \${filled} • Free: \${b.seats.length-filled} • Price: \${formatINR(b.price)}</div>
+      </div>
+      <div class="row">
+        <button class="btn ghost" data-act="edit" data-id="\${b.id}">Edit</button>
+        <button class="btn danger" data-act="del" data-id="\${b.id}">Delete</button>
+      </div>
+    \`;
+    wrap.appendChild(div);
+  });
+  wrap.querySelectorAll('button[data-act="edit"]').forEach(btn => btn.onclick = ()=>loadBusForEdit(btn.dataset.id));
+  wrap.querySelectorAll('button[data-act="del"]').forEach(btn => btn.onclick = ()=>deleteBus(btn.dataset.id));
+}
+
+function loadBusForEdit(id){
+  const buses = DB.load('buses', []);
+  const b = buses.find(x => x.id===id); if(!b) return;
+  qs('#busFrom').value=b.from; qs('#busTo').value=b.to; qs('#busDate').value=b.date;
+  qs('#busTime').value=b.time; qs('#busPrice').value=b.price; qs('#busSeatsCount').value=b.seats.length;
+  qs('#editingBusId').value = b.id;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function deleteBus(id){
+  if(!confirm('Delete this bus?')) return;
+  let buses = DB.load('buses', []);
+  buses = buses.filter(x => x.id!==id);
+  DB.save('buses', buses);
+  renderAdminBuses(); renderBuses();
+}
+
+qs('#clearBusBtn').onclick = () => {
+  ['busFrom','busTo','busDate','busTime','busPrice','editingBusId'].forEach(id => qs('#'+id).value='');
+  qs('#busSeatsCount').value='36';
+}
+
+qs('#saveBusBtn').onclick = () => {
+  const from = qs('#busFrom').value.trim();
+  const to   = qs('#busTo').value.trim();
+  const date = qs('#busDate').value;
+  const time = qs('#busTime').value.trim();
+  const price= Number(qs('#busPrice').value);
+  const count= Number(qs('#busSeatsCount').value);
+  if(!from || !to || !date || !time || !price){ alert('Please fill all fields'); return }
+  let buses = DB.load('buses', []);
+  const editing = qs('#editingBusId').value;
+  if(editing){
+    const idx = buses.findIndex(x => x.id===editing);
+    if(idx>-1){
+      const prev = buses[idx];
+      // keep existing bookings; if seat count changes, expand (new free seats) or shrink (truncate if needed)
+      let seats = prev.seats.slice();
+      if(count > seats.length){ seats = seats.concat(Array.from({length:count-seats.length}, ()=>0)) }
+      if(count < seats.length){ seats = seats.slice(0, count) }
+      buses[idx] = { ...prev, from, to, date, time, price, seats };
+    }
+  }else{
+    buses.push(makeBus(from,to,date,time,price,count));
+  }
+  DB.save('buses', buses);
+  renderAdminBuses(); renderBuses();
+  qs('#clearBusBtn').click();
+};
+
+function renderAdminBookings(){
+  const tbody = qs('#adminBookingsTable tbody'); tbody.innerHTML='';
+  const bookings = DB.load('bookings', []);
+  bookings.sort((a,b)=>b.ts-a.ts);
+  bookings.forEach(b => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = \`<td>\${b.pnr}</td><td>\${b.user}</td><td>\${b.route}</td><td>\${b.date}</td><td>\${b.time}</td><td>\${b.seats.join(', ')}</td><td>\${formatINR(b.amount)}</td>\`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Initial admin renders (if already logged in)
+renderSession();
+renderAdminBuses();
+renderAdminBookings();
+
+</script>
 </body>
 </html>
+"""
+with open("/mnt/data/bus_live_seat_booking.html","w", encoding="utf-8") as f:
+    f.write(html_content)
+"/mnt/data/bus_live_seat_booking.html"
