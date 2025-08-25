@@ -1,250 +1,250 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Bus Booking — Pro (Single HTML)</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bus Booking — Sleeper (All-in-One)</title>
 <style>
   :root{
-    --bg:#0f172a; --panel:#111827; --muted:#1f2937; --text:#e5e7eb; --sub:#9ca3af;
-    --brand:#22c55e; --brand2:#3b82f6; --danger:#ef4444; --warn:#f59e0b; --ok:#10b981; --blocked:#3a3a3a;
+    --bg:#0f172a; --panel:#111827; --muted:#1f2937; --text:#e5e7eb;
+    --brand:#22c55e; --blue:#3b82f6; --danger:#ef4444; --warn:#f59e0b; --blocked:#3a3a3a; --reserved:#f59e0b;
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0;background:linear-gradient(135deg,#0f172a,#0b1227);color:var(--text);
-    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;display:flex;flex-direction:column}
-  a{color:#93c5fd;text-decoration:none}
-  header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(15,23,42,.85);
-    border-bottom:1px solid #1f2937;position:sticky;top:0;z-index:10;backdrop-filter: blur(6px)}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800}
-  .logo{width:34px;height:34px;border-radius:12px;background:radial-gradient(120% 120% at 30% 30%,var(--brand) 0%,var(--brand2) 50%,#6d28d9 100%);box-shadow:0 8px 30px rgba(59,130,246,.35)}
-  .small{font-size:12px;color:var(--sub)}
-  main{width:min(1120px,96%);margin:24px auto;display:grid;gap:16px}
-  .grid{display:grid;gap:12px}
-  .two{grid-template-columns:1.1fr .9fr}
-  @media (max-width:960px){.two{grid-template-columns:1fr}}
-  .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));border:1px solid #1f2937;border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-  .card h3{margin:0 0 10px;font-size:18px}
-  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  body{margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial; background:linear-gradient(135deg,#0f172a,#081225); color:var(--text)}
+  header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(0,0,0,0.35);border-bottom:1px solid #172033}
+  .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+  .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(45deg,var(--brand),var(--blue));box-shadow:0 6px 20px rgba(59,130,246,.18)}
+  main{max-width:1100px;margin:20px auto;padding:0 12px;display:grid;gap:16px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));border:1px solid #172033;padding:14px;border-radius:12px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .space{justify-content:space-between}
-  input,select,button,textarea{background:#0b1227;border:1px solid #273249;color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none}
-  input:focus,select:focus,textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
-  button{cursor:pointer;border:none}
-  .btn{background:var(--brand2);font-weight:700;padding:9px 12px;border-radius:10px}
+  input,select,button{background:#071025;border:1px solid #1b2a3a;color:var(--text);padding:8px 10px;border-radius:8px}
+  button{cursor:pointer}
+  .btn{background:var(--blue);color:#fff;border-radius:8px;padding:8px 12px;border:none}
   .btn.alt{background:var(--brand)}
-  .btn.ghost{background:transparent;border:1px solid #334155;padding:8px 10px}
+  .btn.ghost{background:transparent;border:1px solid #223246;color:var(--text)}
   .btn.warn{background:var(--warn)}
   .btn.danger{background:var(--danger)}
-  .btn:disabled{opacity:.6;cursor:not-allowed}
-  .pill{padding:6px 10px;border-radius:999px;background:#0b1227;border:1px solid #334155;color:#cbd5e1;font-size:12px}
-  .list{display:grid;gap:10px}
-  .list-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #1f2937;border-radius:14px;background:linear-gradient(180deg,#0b1227,#0a1020)}
-  .divider{height:1px;background:#1f2937;margin:10px 0}
-  .notice{padding:10px;border-left:3px solid #3b82f6;background:#0b1227;border-radius:8px}
-  .table{width:100%;border-collapse:collapse}
-  .table th,.table td{border-bottom:1px solid #1f2937;text-align:left;padding:8px}
-  .table th{color:#cbd5e1;font-weight:700}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap}
-  .tab{padding:8px 12px;border-radius:999px;border:1px solid #334155;background:#0b1227;cursor:pointer}
-  .tab.active{background:#1e293b}
+  .pill{padding:6px 10px;border-radius:999px;background:#071025;border:1px solid #223246}
+  .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid #122233;background:linear-gradient(180deg,#061022,#020512)}
+  .muted{color:#9aa6b6;font-size:13px}
+  .divider{height:1px;background:#122233;margin:10px 0}
   .hidden{display:none}
-  .muted{color:var(--sub);font-size:13px}
-
-  /* Seat grid */
-  .seat-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#0b1227;border:1px dashed #334155;padding:12px;border-radius:14px}
-  .seat{height:46px;border-radius:10px;border:1px solid #334155;display:flex;align-items:center;justify-content:center;user-select:none;font-weight:700}
-  .seat.free{background:#052e1a;border-color:#064e3b;color:#86efac}
-  .seat.selected{background:#062a48;border-color:#1d4ed8;color:#bfdbfe;box-shadow:0 0 0 3px rgba(59,130,246,.18) inset}
-  .seat.booked{background:#3a0d0d;border-color:#7f1d1d;color:#fecaca;text-decoration:line-through}
-  .seat.blocked{background:#2b2b2b;border-color:#4b4b4b;color:#d1d5db}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:8px;border-bottom:1px solid #122233;text-align:left}
+  th{color:#cfe4ff}
+  /* seat grid */
+  .seat-wrap{display:grid;gap:8px;padding:12px;border-radius:10px;border:1px dashed #223246;background:#04101a}
+  .seat{height:46px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;user-select:none;border:1px solid #253645}
+  .seat.free{background:#05351f;color:#c8ffde;border-color:#064e3b}
+  .seat.selected{background:#06304b;color:#dbeeff;border-color:#1d4ed8;box-shadow:inset 0 0 0 3px rgba(59,130,246,.12)}
+  .seat.reserved{background:#5a3b0a;color:#fff;border-color:#f59e0b}
+  .seat.booked{background:#3a0d0d;color:#ffd7d7;border-color:#7f1d1d;text-decoration:line-through}
+  .seat.blocked{background:#212121;color:#cbd5dd;border-color:#3b3b3b}
   .legend{display:flex;gap:10px;align-items:center}
-  .legend .swatch{width:14px;height:14px;border-radius:3px;border:1px solid #334155}
-  .swatch.free{background:#052e1a;border-color:#064e3b}
-  .swatch.sel{background:#062a48;border-color:#1d4ed8}
-  .swatch.booked{background:#3a0d0d;border-color:#7f1d1d}
-  .swatch.blocked{background:#2b2b2b;border-color:#4b4b4b}
+  .sw{width:14px;height:14px;border-radius:3px;border:1px solid #233445}
+  .sw.free{background:#05351f}
+  .sw.sel{background:#06304b}
+  .sw.res{background:#5a3b0a}
+  .sw.book{background:#3a0d0d}
+  .sw.block{background:#212121}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">
-    <div class="logo"></div>
-    <div>Bus Booking
-      <div class="small">RedBus-style • PDF Tickets • CSV Export</div>
-    </div>
-  </div>
+  <div class="brand"><div class="logo"></div>Bus Booking — Sleeper (All-in-One)</div>
   <div id="sessionArea" class="row"></div>
 </header>
 
-<main class="grid">
-  <!-- Home / Login -->
+<main>
+  <!-- INDEX -->
   <section id="page-index" class="card">
-    <div class="tabs" style="margin-bottom:8px">
-      <button class="tab active" data-tab="loginTab">User Login</button>
-      <button class="tab" data-tab="signupTab">Sign Up</button>
-      <button class="tab" data-tab="adminTab">Admin</button>
-    </div>
+    <div class="row" style="gap:18px;align-items:flex-start">
+      <div style="flex:1;min-width:320px">
+        <div class="row" style="margin-bottom:8px">
+          <button class="btn tab active" data-tab="loginTab">User Login</button>
+          <button class="btn tab ghost" data-tab="signupTab">Sign Up</button>
+          <button class="btn tab ghost" data-tab="adminTab">Admin</button>
+        </div>
 
-    <div id="loginTab">
-      <h3>User Login</h3>
-      <div class="row" style="margin-top:8px">
-        <input id="loginUser" placeholder="Username" />
-        <input id="loginPass" type="password" placeholder="Password" />
-        <button class="btn" id="loginBtn">Login</button>
-        <button class="btn ghost" id="goBookingBtn">Go to Booking</button>
+        <div id="loginTab">
+          <h3>User Login</h3>
+          <div class="row" style="margin-top:8px">
+            <input id="loginUser" placeholder="Username"/>
+            <input id="loginPass" type="password" placeholder="Password"/>
+            <button class="btn" id="loginBtn">Login</button>
+            <button class="btn ghost" id="gotoBookingBtn">Go to Booking</button>
+          </div>
+        </div>
+
+        <div id="signupTab" class="hidden">
+          <h3>Sign Up</h3>
+          <div class="row" style="margin-top:8px">
+            <input id="suUser" placeholder="Choose username"/>
+            <input id="suPass" type="password" placeholder="Choose password"/>
+            <button class="btn alt" id="signupBtn">Create</button>
+          </div>
+        </div>
+
+        <div id="adminTab" class="hidden">
+          <h3>Admin Login</h3>
+          <div class="row" style="margin-top:8px">
+            <input id="adminUser" placeholder="Admin ID (default admin)"/>
+            <input id="adminPass" type="password" placeholder="Password (default admin123)"/>
+            <button class="btn warn" id="adminLoginBtn">Admin Login</button>
+            <button class="btn ghost" id="gotoAdminBtn">Go to Admin</button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div id="signupTab" class="hidden">
-      <h3>Create Account</h3>
-      <div class="row" style="margin-top:8px">
-        <input id="suUser" placeholder="Choose username" />
-        <input id="suPass" type="password" placeholder="Choose password" />
-        <button class="btn alt" id="signupBtn">Create</button>
-      </div>
-    </div>
-
-    <div id="adminTab" class="hidden">
-      <h3>Admin Login</h3>
-      <div class="row" style="margin-top:8px">
-        <input id="adminUser" placeholder="Admin ID (default: admin)" />
-        <input id="adminPass" type="password" placeholder="Password (default: admin123)" />
-        <button class="btn warn" id="adminLoginBtn">Admin Login</button>
-        <button class="btn ghost" id="goAdminBtn">Go to Admin</button>
+      <div style="width:360px;min-width:240px">
+        <div class="card">
+          <h3>Quick Links</h3>
+          <div class="row" style="margin-top:8px">
+            <button class="pill btn" id="quickBooking">User Booking</button>
+            <button class="pill btn ghost" id="quickAdmin">Admin Panel</button>
+          </div>
+          <div class="divider"></div>
+          <div class="muted">Admin: <strong>admin</strong> / <strong>admin123</strong></div>
+          <div class="muted" style="margin-top:6px">Sleeper layout: Lower (A/B/C 30 seats) & Upper (SL/SR/SP 15 seats) = 45 total.</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Booking Page -->
-  <section id="page-booking" class="hidden card">
+  <!-- BOOKING -->
+  <section id="page-booking" class="card hidden">
     <div class="row space">
       <div>
-        <h3>Find a Bus</h3>
-        <div class="muted">Search by route, date, or bus number → View seats → Pay → PDF ticket</div>
+        <h3>Search & Booking</h3>
+        <div class="muted">Search by route, date or bus number. For sleeper buses, switch Upper/Lower using tabs in seat area.</div>
       </div>
       <div class="row">
         <span class="pill" id="busCountPill">0 buses</span>
-        <button class="btn ghost" id="backHomeFromBooking">Home</button>
+        <button class="btn ghost" id="backHome">Home</button>
       </div>
     </div>
 
-    <div class="row" style="margin-top:8px">
-      <input id="fromInp" placeholder="From (city)" />
-      <input id="toInp" placeholder="To (city)" />
-      <input id="dateInp" type="date" />
-      <input id="busNoInp" placeholder="Bus Number" />
+    <div style="margin-top:10px" class="row">
+      <input id="fromInp" placeholder="From"/>
+      <input id="toInp" placeholder="To"/>
+      <input id="dateInp" type="date"/>
+      <input id="busNoInp" placeholder="Bus No"/>
       <button class="btn" id="searchBtn">Search</button>
       <button class="btn ghost" id="resetBtn">Reset</button>
     </div>
 
     <div class="divider"></div>
-    <div id="busList" class="list"></div>
+    <div id="busList"></div>
 
-    <div id="seatCard" class="card hidden" style="margin-top:12px">
+    <div id="seatArea" class="card hidden" style="margin-top:12px">
       <div class="row space">
-        <h3 id="seatTitle">Select Seats</h3>
+        <h3 id="seatTitle">Seat Map</h3>
         <div class="legend">
-          <div class="swatch free"></div><span class="small">Free</span>
-          <div class="swatch sel"></div><span class="small">Selected</span>
-          <div class="swatch booked"></div><span class="small">Booked</span>
-          <div class="swatch blocked"></div><span class="small">Blocked</span>
+          <div class="sw sw.free"></div><div class="muted">Free</div>
+          <div style="width:10px"></div>
+          <div class="sw sw.sel"></div><div class="muted">Selected</div>
+          <div style="width:10px"></div>
+          <div class="sw sw.res"></div><div class="muted">Pending</div>
+          <div style="width:10px"></div>
+          <div class="sw sw.book"></div><div class="muted">Confirmed</div>
+          <div style="width:10px"></div>
+          <div class="sw sw.block"></div><div class="muted">Blocked</div>
         </div>
       </div>
-      <div id="seatWrap" class="seat-wrap"></div>
+
+      <!-- switcher for sleeper -->
+      <div class="row" style="margin-top:8px">
+        <div id="upperLowerTabs" class="row hidden">
+          <button class="btn tabUL active" data-which="lower">Lower Deck</button>
+          <button class="btn tabUL ghost" data-which="upper">Upper Deck</button>
+        </div>
+        <div style="margin-left:auto" class="muted">Fare: <span id="fareInfo">₹0</span></div>
+      </div>
+
+      <div id="seatWrap" class="seat-wrap" style="margin-top:12px"></div>
+
       <div class="row space" style="margin-top:12px">
-        <div class="row" style="gap:8px"><span class="muted">Selected:</span><span id="selSeats" class="pill">None</span></div>
-        <div class="row" style="gap:8px">
-          <span class="muted">Total:</span><span id="totalFare" class="pill">₹0</span>
-          <button class="btn alt" id="payBtn" disabled>Proceed to Payment</button>
+        <div class="row"><div class="muted">Selected:</div><div id="selSeats" class="pill">None</div></div>
+        <div class="row">
+          <div class="muted">Total:</div><div id="totalFare" class="pill">₹0</div>
+          <button class="btn alt" id="payBtn" disabled>Pay (Demo)</button>
         </div>
       </div>
     </div>
 
     <div id="paymentCard" class="card hidden" style="margin-top:12px">
       <h3>Payment (Demo)</h3>
-      <div class="notice small">No real charge. Enter any reference (UPI/Card/NetBanking) and confirm.</div>
+      <div class="muted">This is demo payment. After paying, booking becomes Pending and admin must Confirm or Reject.</div>
       <div class="row" style="margin-top:8px">
         <select id="payMethod"><option>UPI</option><option>Card</option><option>NetBanking</option></select>
-        <input id="payRef" placeholder="UPI ID / Card last 4 / Ref" />
-        <button class="btn" id="confirmPayBtn">Pay & Generate PDF Ticket</button>
+        <input id="payRef" placeholder="UPI ID or reference"/>
+        <button class="btn" id="confirmPayBtn">Pay & Request Booking</button>
         <button class="btn ghost" id="cancelPayBtn">Cancel</button>
       </div>
     </div>
 
-    <div id="myBookingsCard" class="card hidden" style="margin-top:12px">
+    <div id="myBookings" class="card hidden" style="margin-top:12px">
       <h3>My Bookings</h3>
-      <table class="table" id="myBookingsTable">
-        <thead><tr><th>PNR</th><th>Bus No.</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th><th>Status</th></tr></thead>
-        <tbody></tbody>
-      </table>
+      <table id="myBookingsTable"><thead><tr><th>PNR</th><th>Bus</th><th>Date</th><th>Seats</th><th>Amount</th><th>Status</th><th>Ticket</th></tr></thead><tbody></tbody></table>
     </div>
   </section>
 
-  <!-- Admin Page -->
-  <section id="page-admin" class="hidden card">
+  <!-- ADMIN -->
+  <section id="page-admin" class="card hidden">
     <div class="row space">
       <h3>Admin Panel</h3>
       <div class="row">
-        <button class="btn ghost" id="adminHomeBtn">Home</button>
-        <button class="btn danger" id="forceLogoutAdmin">Logout</button>
+        <button class="btn ghost" id="adminHome">Home</button>
+        <button class="btn danger" id="adminLogout">Logout</button>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <div class="row">
-      <input id="busNo" placeholder="Bus Number (e.g., OD-05-1234 / DRUTHI RATH)" />
-      <input id="busFrom" placeholder="From" />
-      <input id="busTo" placeholder="To" />
-      <input id="busDate" type="date" />
-      <input id="busTime" placeholder="Time (e.g., 08:00 AM)" />
-      <input id="busPrice" type="number" placeholder="Price (₹)" />
+    <div class="row" style="gap:8px">
+      <input id="admBusNo" placeholder="Bus No (e.g., OD-05-1234 DRUTHI RATH)"/>
+      <input id="admFrom" placeholder="From"/>
+      <input id="admTo" placeholder="To"/>
+      <input id="admDate" type="date"/>
+      <input id="admTime" placeholder="Time (08:00 AM)"/>
+      <input id="admPrice" type="number" placeholder="Price"/>
+      <select id="admLayout"><option value="2x2_40">2+2 (40)</option><option value="2x1_30">2+1 (30)</option><option value="sleeper_45">Sleeper (45)</option></select>
     </div>
+
     <div class="row" style="margin-top:8px">
-      <select id="layout">
-        <option value="2x2_40">2+2 (40 seats) — A/B | C/D rows</option>
-        <option value="2x1_30">2+1 (30 seats) — A/B | C rows</option>
-        <option value="sleeper_36">Sleeper (36 berths) — SL/SR (Lower), SU/SR (Upper)</option>
-      </select>
-      <input id="blockedSeats" placeholder="Blocked seats (e.g., A1,B3,SL2)" style="flex:1" />
-      <button class="btn" id="saveBusBtn">Save Bus</button>
-      <button class="btn ghost" id="clearBusBtn">Clear</button>
-      <input type="hidden" id="editingBusId" />
+      <input id="admBlocked" placeholder="Blocked seats comma separated (e.g. A1,B3,SL2)" style="flex:1"/>
+      <button class="btn" id="saveBus">Save Bus</button>
+      <button class="btn ghost" id="clearBus">Clear</button>
+      <input type="hidden" id="editingBusId"/>
     </div>
-    <div class="small">Tip: blocked = “deducted” seats (maintenance/hold). They appear grey and cannot be booked.</div>
 
     <div class="divider"></div>
 
     <div class="row space">
-      <h3>All Buses</h3>
+      <h4>All Buses</h4>
       <div class="row">
-        <button class="btn ghost" id="exportBusesCsv">Export Buses (CSV)</button>
-        <button class="btn ghost" id="exportBookingsCsv">Export Bookings (CSV)</button>
+        <button class="btn ghost" id="exportBuses">Export Buses (CSV)</button>
+        <button class="btn ghost" id="exportBookings">Export Bookings (CSV)</button>
       </div>
     </div>
-    <div id="adminBusList" class="list" style="margin-top:8px"></div>
+    <div id="adminBusList" style="margin-top:8px"></div>
 
     <div class="divider"></div>
 
-    <h3>All Bookings</h3>
-    <table class="table" id="adminBookingsTable">
-      <thead><tr><th>PNR</th><th>User</th><th>Bus No.</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th><th>Method</th></tr></thead>
-      <tbody></tbody>
-    </table>
+    <h4>All Bookings</h4>
+    <table id="adminBookingsTable"><thead><tr><th>PNR</th><th>User</th><th>Bus</th><th>Date</th><th>Seats</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table>
   </section>
 </main>
 
-<footer style="text-align:center;color:#94a3b8;padding:12px 0">© Bus Booking Demo — LocalStorage • PDF • CSV</footer>
+<footer style="text-align:center;color:#9aa6b6;padding:12px">Demo app — LocalStorage • Admin confirm/reject • PDF via jsPDF</footer>
 
-<!-- jsPDF (minified) embedded for client-side PDF creation -->
+<!-- tiny jsPDF (same minimal embedded builder used earlier) -->
 <script>
-/* Minimal jsPDF v2.5.1 build (subset) — inlined for offline PDF.
-   Source: https://github.com/parallax/jsPDF  (MIT License)
-   This is a tiny build sufficient for simple text PDFs. */
 !function(f){typeof define=="function"&&define.amd?define(f):f()}(function(){function e(){return window.jspdf||window.jsPDF}
 if(!e()){var o=function(){return function(t){this.internal={};this.__pages=[[]];this.addPage=function(){this.__pages.push([]);return this};
 this.text=function(txt,x,y,opts){this.__pages[this.__pages.length-1].push({t:txt,x:x,y:y});return this};
-this.save=function(name){var pdf="%PDF-1.3\n";var body="";var objs=[];var pageRefs=[];function esc(s){return String(s).replace(/\\(/g,"\\\\(").replace(/\\)/g,"\\\\)") }
+this.save=function(name){var pdf="%PDF-1.3\n";var body="";var objs=[];var pageRefs=[];function esc(s){return String(s).replace(/\\(/g,"\\\\(").replace(/\\)/g,"\\\\)")}
 function pageStream(items){var c="BT\n/F1 12 Tf\n";items.forEach(function(it){c+=""+it.x+" "+(792-it.y)+" Td ("+esc(it.t)+") Tj\n"});c+="ET";return c}
 function obj(id,content){objs.push({id:id,content:content})}
 var font="<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>";
@@ -261,357 +261,361 @@ var blob=new Blob([pdf],{type:"application/pdf"});var link=document.createElemen
 </script>
 
 <script>
-/* =========================
-   LocalStorage + Utilities
-========================= */
+/* ---------------------------
+   LocalStorage helper + util
+----------------------------*/
 const DB = {
-  load(k, def){ try{ return JSON.parse(localStorage.getItem(k)) ?? def } catch{ return def } },
-  save(k, v){ localStorage.setItem(k, JSON.stringify(v)) }
+  load(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
+  save(k,v){ localStorage.setItem(k, JSON.stringify(v)) }
 };
-const Util = {
-  qs:s=>document.querySelector(s),
-  qsa:s=>Array.from(document.querySelectorAll(s)),
-  id:()=> (crypto?.randomUUID?.() || 'id'+Math.floor(Math.random()*1e9)),
-  today:()=> new Date().toISOString().slice(0,10),
-  money:n=>'₹'+Number(n).toLocaleString('en-IN'),
-  showPage(id){ ['page-index','page-booking','page-admin'].forEach(p=>Util.qs('#'+p).classList.add('hidden')); Util.qs('#'+id).classList.remove('hidden'); renderSession(); }
+const U = {
+  qs: s=>document.querySelector(s), qsa:s=>Array.from(document.querySelectorAll(s)),
+  id: ()=> (crypto?.randomUUID?.() || 'id'+Math.floor(Math.random()*1e9)),
+  today: ()=> new Date().toISOString().slice(0,10),
+  money: n => '₹'+Number(n).toLocaleString('en-IN'),
+  show: id => { ['page-index','page-booking','page-admin'].forEach(p=>U.qs('#'+p).classList.add('hidden')); U.qs('#'+id).classList.remove('hidden'); renderSession(); }
 };
-function getSession(){ return DB.load('session', null) }
-function setSession(s){ DB.save('session', s); renderSession(); }
-function clearSession(){ DB.save('session', null); renderSession(); Util.showPage('page-index'); }
 
-/* =========================
-   Seat Layout Presets
-========================= */
-/* state values: 0=free, 1=booked, 2=blocked (deducted) */
+/* ---------------------------
+   Seat layouts (including sleeper 45)
+   Seat naming consistent with provided PDF:
+   Lower: A1..A10, B1..B10, C1..C10  => 30 seats
+   Upper: SL1..SL5, SR1..SR5, SP1..SP5 => 15 seats
+----------------------------*/
 const Layouts = {
-  "2x2_40": ()=> {
-    // A/B | C/D for rows 1..10 => 40 seats: A1,B1,C1,D1 ... A10,B10,C10,D10
-    const names=[]; for(let r=1;r<=10;r++){ ["A","B","C","D"].forEach(c=>names.push(c+r)); } 
-    return names;
-  },
-  "2x1_30": ()=> {
-    // A/B | C rows 1..10 => 30 seats
-    const names=[]; for(let r=1;r<=10;r++){ ["A","B","C"].forEach(c=>names.push(c+r)); } 
-    return names;
-  },
-  "sleeper_36": ()=> {
-    // Lower: SL1..SL9, SR1..SR9 (18), Upper: UL1..UL9, UR1..UR9 (18)
-    const names=[]; for(let i=1;i<=9;i++){ names.push("SL"+i,"SR"+i); } for(let i=1;i<=9;i++){ names.push("UL"+i,"UR"+i); }
-    return names;
-  }
+  "2x2_40": ()=>{ const arr=[]; for(let r=1;r<=10;r++){ ['A','B','C','D'].forEach(c=>arr.push(c+r)); } return arr; },
+  "2x1_30": ()=>{ const arr=[]; for(let r=1;r<=10;r++){ ['A','B','C'].forEach(c=>arr.push(c+r)); } return arr; },
+  "sleeper_45": ()=>{ const a=[]; for(let r=1;r<=10;r++){ ['A','B','C'].forEach(c=>a.push(c+r)); } for(let i=1;i<=5;i++){ a.push('SL'+i); } for(let i=1;i<=5;i++){ a.push('SR'+i); } for(let i=1;i<=5;i++){ a.push('SP'+i); } return a; }
 };
 
-/* =========================
-   Seed demo data
-========================= */
+/* ---------------------------
+   Seed initial data
+----------------------------*/
 (function seed(){
   const users = DB.load('users', []);
-  if(!users.find(u=>u.username==='admin')){
-    users.push({username:'admin', password:'admin123', role:'admin'});
-    DB.save('users', users);
-  }
+  if(!users.find(u=>u.username==='admin')){ users.push({username:'admin',password:'admin123',role:'admin'}); DB.save('users',users); }
   if(!DB.load('buses', null)){
-    const d=Util.today();
+    const d=U.today();
     DB.save('buses', [
-      makeBus({busNo:"OD-05-1234 DRUTHI RATH", from:"Bhubaneswar", to:"Kolkata", date:d, time:"08:00 AM", price:550, layout:"2x2_40", blocked:["A1","B1"]}),
-      makeBus({busNo:"OD-07-6688 SKYLINE", from:"Bhubaneswar", to:"Delhi", date:d, time:"05:00 PM", price:1200, layout:"2x1_30", blocked:[]}),
-      makeBus({busNo:"WB-02-7788 EASTERN", from:"Kolkata", to:"Bhubaneswar", date:d, time:"06:30 PM", price:600, layout:"sleeper_36", blocked:["SL3","UR5"]})
+      makeBus({busNo:'DRUTHI RATH OD-05-1234', from:'Bhubaneswar', to:'Kolkata', date:d, time:'08:00 AM', price:550, layout:'sleeper_45', blocked:['A1','B1']}),
+      makeBus({busNo:'SKYLINE OD-07-6688', from:'Bhubaneswar', to:'Delhi', date:d, time:'05:00 PM', price:1200, layout:'2x1_30', blocked:[]})
     ]);
   }
-  if(!DB.load('bookings', null)) DB.save('bookings', []);
+  if(DB.load('bookings', null)===null) DB.save('bookings', []);
   if(DB.load('session', null)===null) DB.save('session', null);
 })();
 
-function makeBus({busNo,from,to,date,time,price,layout,blocked}){
-  const seatNames = Layouts[layout]();
-  const seats = seatNames.map(n => (blocked?.includes(n)?2:0));
-  return { id:Util.id(), busNo, from, to, date, time, price:Number(price), layout, seatNames, seats };
+function makeBus({busNo,from,to,date,time,price,layout,blocked=[]}){
+  const names = Layouts[layout]();
+  const seats = names.map(n => blocked.includes(n)?2:0); // 0 free,1 booked,2 blocked,3 reserved/pending
+  return { id: U.id(), busNo, from, to, date, time, price:Number(price), layout, seatNames:names, seats };
 }
 
-/* =========================
-   Header Session
-========================= */
+/* ---------------------------
+   Session & header
+----------------------------*/
+function getSession(){ return DB.load('session', null) }
+function setSession(s){ DB.save('session', s); renderSession(); }
+function clearSession(){ DB.save('session', null); renderSession(); U.show('page-index'); }
+
 function renderSession(){
+  const sa = U.qs('#sessionArea'); sa.innerHTML='';
   const s = getSession();
-  const sa = Util.qs('#sessionArea'); sa.innerHTML='';
   if(s){
-    const row = document.createElement('div'); row.className='row';
-    row.innerHTML = `<span class="pill">Signed in: ${s.username} ${s.role==='admin'?'(Admin)':''}</span>
-                     <button class="btn ghost" id="logoutBtn">Logout</button>`;
-    sa.appendChild(row);
-    Util.qs('#logoutBtn').onclick = ()=> { clearSession(); alert('Logged out'); };
-  }else{
-    sa.innerHTML = `<a href="#" id="goHomeHeader">Login</a>`;
-    Util.qs('#goHomeHeader').onclick = (e)=>{ e.preventDefault(); Util.showPage('page-index'); };
+    sa.innerHTML = `<div class="row"><div class="pill">Signed in: ${s.username} ${s.role==='admin'? '(Admin)':''}</div><button class="btn ghost" id="logoutHeader">Logout</button></div>`;
+    U.qs('#logoutHeader').onclick = ()=> { clearSession(); alert('Logged out'); }
+  } else {
+    sa.innerHTML = `<div class="muted">Not signed in</div>`;
   }
 }
 
-/* =========================
-   Tabs on index
-========================= */
-Util.qsa('.tab').forEach(btn=>btn.addEventListener('click', ()=>{
-  Util.qsa('.tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active');
-  ['loginTab','signupTab','adminTab'].forEach(id=> Util.qs('#'+id).classList.toggle('hidden', btn.dataset.tab!==id));
+/* ---------------------------
+   Index page logic (tabs + auth)
+----------------------------*/
+U.qsa('.tab').forEach(btn => btn.addEventListener('click', ()=>{
+  U.qsa('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['loginTab','signupTab','adminTab'].forEach(id => U.qs('#'+id).classList.toggle('hidden', btn.dataset.tab !== id));
 }));
 
-/* =========================
-   Auth flows
-========================= */
-Util.qs('#loginBtn').onclick = ()=>{
-  const u=Util.qs('#loginUser').value.trim(), p=Util.qs('#loginPass').value;
+U.qs('#loginBtn').onclick = ()=>{
+  const u = U.qs('#loginUser').value.trim(), p = U.qs('#loginPass').value;
   const users = DB.load('users', []);
   const found = users.find(x=>x.username===u && x.password===p && x.role!=='admin');
-  if(found){ setSession({username:u, role:'user'}); alert('Welcome '+u); Util.showPage('page-booking'); renderBuses(); renderMyBookings(); }
-  else alert('Invalid user credentials. Sign up if new.');
+  if(found){ setSession({username:u, role:'user'}); alert('Welcome '+u); U.show('page-booking'); renderBuses(); renderMyBookings(); } else alert('Invalid user credentials');
 };
-Util.qs('#signupBtn').onclick = ()=>{
-  const u=Util.qs('#suUser').value.trim(), p=Util.qs('#suPass').value;
+U.qs('#signupBtn').onclick = ()=>{
+  const u = U.qs('#suUser').value.trim(), p = U.qs('#suPass').value;
   if(!u||!p){ alert('Enter username & password'); return; }
-  const users = DB.load('users', []);
-  if(users.find(x=>x.username===u)){ alert('Username already exists'); return; }
-  users.push({username:u, password:p, role:'user'}); DB.save('users', users);
-  alert('Account created. Please login.');
-  Util.qs('[data-tab="loginTab"]').click();
+  const users = DB.load('users', []); if(users.find(x=>x.username===u)){ alert('Username exists'); return; }
+  users.push({username:u,password:p,role:'user'}); DB.save('users',users); alert('Account created'); U.qs('[data-tab="loginTab"]').click();
 };
-Util.qs('#adminLoginBtn').onclick = ()=>{
-  const u=(Util.qs('#adminUser').value.trim()||'admin'), p=(Util.qs('#adminPass').value||'admin123');
-  const users=DB.load('users',[]); const ok=users.find(x=>x.username===u && x.password===p && x.role==='admin');
-  if(ok){ setSession({username:u, role:'admin'}); alert('Admin logged in'); Util.showPage('page-admin'); renderAdminBuses(); renderAdminBookings(); }
-  else alert('Wrong admin credentials');
+U.qs('#adminLoginBtn').onclick = ()=>{
+  const u = (U.qs('#adminUser').value.trim()||'admin'), p = (U.qs('#adminPass').value||'admin123');
+  const users = DB.load('users', []); const ok = users.find(x=>x.username===u && x.password===p && x.role==='admin');
+  if(ok){ setSession({username:u, role:'admin'}); alert('Admin logged in'); U.show('page-admin'); renderAdminBuses(); renderAdminBookings(); } else alert('Wrong admin credentials');
 };
 
-Util.qs('#goBookingBtn').onclick = ()=>{ Util.showPage('page-booking'); renderBuses(); renderMyBookings(); };
-Util.qs('#goAdminBtn').onclick = ()=>{ const s=getSession(); if(s?.role==='admin'){ Util.showPage('page-admin'); renderAdminBuses(); renderAdminBookings(); } else Util.showPage('page-index') };
-Util.qs('#backHomeFromBooking').onclick = ()=> Util.showPage('page-index');
-Util.qs('#adminHomeBtn').onclick = ()=> Util.showPage('page-index');
-Util.qs('#forceLogoutAdmin').onclick = ()=> { clearSession(); };
+U.qs('#gotoBookingBtn').onclick = ()=>{ U.show('page-booking'); renderBuses(); renderMyBookings(); };
+U.qs('#gotoAdminBtn').onclick = ()=>{ const s=getSession(); if(s?.role==='admin'){ U.show('page-admin'); renderAdminBuses(); renderAdminBookings(); } else U.show('page-index'); };
+U.qs('#quickBooking').onclick = ()=>{ U.show('page-booking'); renderBuses(); renderMyBookings(); };
+U.qs('#quickAdmin').onclick = ()=>{ if(getSession()?.role==='admin'){ U.show('page-admin'); renderAdminBuses(); renderAdminBookings(); } else U.show('page-index'); };
 
-/* =========================
-   Booking page
-========================= */
-let currentBusId=null;
-let selectedSeatIdx=[];
+/* ---------------------------
+   Booking: search + seat map
+----------------------------*/
+let currentBusId = null;
+let selectedIdx = [];
+let showingDeck = 'lower'; // 'lower' or 'upper' for sleeper
 
 function renderBuses(filter=null){
   const buses = DB.load('buses', []);
-  const list = Util.qs('#busList'); list.innerHTML='';
+  const list = U.qs('#busList'); list.innerHTML='';
   const filtered = filter ? buses.filter(filter) : buses;
-  Util.qs('#busCountPill').textContent = `${filtered.length} buses`;
-
+  U.qs('#busCountPill').textContent = `${filtered.length} buses`;
   filtered.forEach(b=>{
-    const filled = b.seats.filter(s=>s===1).length;
-    const free = b.seats.filter(s=>s===0).length;
-    const li = document.createElement('div'); li.className='list-item';
-    li.innerHTML = `
-      <div>
-        <div style="font-weight:700">${b.busNo}</div>
-        <div class="small">${b.from} → ${b.to} • ${b.date} • ${b.time}</div>
-        <div class="small">${Util.money(b.price)} per seat • Free: ${free} / Total: ${b.seats.length}</div>
-        <div class="small">Layout: ${b.layout}</div>
+    const free = b.seats.filter(s=>s===0).length, booked = b.seats.filter(s=>s===1).length;
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `<div>
+      <div style="font-weight:700">${b.busNo}</div>
+      <div class="muted">${b.from} → ${b.to} • ${b.date} • ${b.time}</div>
+      <div class="muted">${U.money(b.price)} per seat • Free ${free} / ${b.seatNames.length}</div>
       </div>
-      <div class="row">
-        <button class="btn" data-id="${b.id}">View Seats</button>
-      </div>`;
-    list.appendChild(li);
+      <div class="row"><button class="btn" data-id="${b.id}">View Seats</button></div>`;
+    list.appendChild(div);
   });
-
-  list.querySelectorAll('button').forEach(btn=> btn.onclick = ()=> openSeatMap(btn.dataset.id));
+  list.querySelectorAll('button').forEach(b=>b.onclick = ()=> openSeatMap(b.dataset.id));
 }
+
+U.qs('#searchBtn').onclick = ()=>{
+  const f = U.qs('#fromInp').value.trim().toLowerCase();
+  const t = U.qs('#toInp').value.trim().toLowerCase();
+  const d = U.qs('#dateInp').value;
+  const bn = U.qs('#busNoInp').value.trim().toLowerCase();
+  renderBuses(bus=> (!f||bus.from.toLowerCase().includes(f)) && (!t||bus.to.toLowerCase().includes(t)) && (!d||bus.date===d) && (!bn||bus.busNo.toLowerCase().includes(bn)));
+};
+U.qs('#resetBtn').onclick = ()=>{ ['fromInp','toInp','dateInp','busNoInp'].forEach(id=>U.qs('#'+id).value=''); renderBuses(); };
+U.qs('#backHome').onclick = ()=> U.show('page-index');
 
 function openSeatMap(id){
-  const buses = DB.load('buses', []); const b = buses.find(x=>x.id===id); if(!b) return alert('Bus not found');
-  currentBusId = id; selectedSeatIdx = [];
-  Util.qs('#seatTitle').textContent = `Select Seats — ${b.busNo} • ${b.from} → ${b.to} (${b.date} • ${b.time})`;
-  Util.qs('#seatCard').classList.remove('hidden'); Util.qs('#paymentCard').classList.add('hidden');
-  renderSeatGrid(b); updateFare();
-  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+  const buses = DB.load('buses', []); const bus = buses.find(x=>x.id===id); if(!bus) return alert('not found');
+  currentBusId = id; selectedIdx = [];
+  U.qs('#seatArea').classList.remove('hidden');
+  U.qs('#paymentCard').classList.add('hidden');
+  U.qs('#seatTitle').textContent = `Seats — ${bus.busNo} (${bus.from} → ${bus.to})`;
+  // if sleeper layout, show upper/lower tabs
+  if(bus.layout === 'sleeper_45'){ U.qs('#upperLowerTabs').classList.remove('hidden'); showingDeck='lower'; U.qsa('.tabUL').forEach(t=>t.classList.remove('active')); U.qs('.tabUL[data-which="lower"]').classList.add('active'); } else { U.qs('#upperLowerTabs').classList.add('hidden'); }
+  renderSeatGrid(bus);
+  updateFare();
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
+
+U.qsa('.tabUL').forEach(btn=>btn.addEventListener('click', ()=>{
+  U.qsa('.tabUL').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active'); showingDeck = btn.dataset.which;
+  const bus = DB.load('buses', []).find(b=>b.id===currentBusId);
+  if(bus) renderSeatGrid(bus);
+}));
 
 function renderSeatGrid(bus){
-  const grid = Util.qs('#seatWrap'); grid.innerHTML='';
-  // grid columns by layout
-  grid.style.gridTemplateColumns = (bus.layout==="2x1_30") ? "repeat(3,1fr)" : "repeat(4,1fr)";
-  bus.seatNames.forEach((name, idx)=>{
-    const div = document.createElement('div'); div.className='seat'; div.textContent = name;
-    const st = bus.seats[idx];
-    if(st===1) div.classList.add('booked');
-    else if(st===2) div.classList.add('blocked');
-    else if(selectedSeatIdx.includes(idx)) { div.classList.add('selected'); div.onclick = ()=> toggleSeat(idx) }
-    else { div.classList.add('free'); div.onclick = ()=> toggleSeat(idx) }
-    grid.appendChild(div);
+  const wrap = U.qs('#seatWrap'); wrap.innerHTML='';
+  // Determine which seat subset to show if sleeper
+  let indices = [];
+  if(bus.layout === 'sleeper_45'){
+    if(showingDeck === 'lower'){
+      // lower: A1..A10, B1..B10, C1..C10 => indices 0..29
+      indices = Array.from(Array(30).keys());
+      wrap.style.gridTemplateColumns = 'repeat(3,1fr)';
+    } else {
+      // upper seats SL1..SL5 (30..34), SR1..SR5 (35..39), SP1..SP5 (40..44)
+      indices = Array.from({length:15}, (_,i)=>30+i);
+      wrap.style.gridTemplateColumns = 'repeat(5,1fr)';
+    }
+  } else {
+    // non-sleeper: show all seats
+    indices = Array.from({length:bus.seatNames.length}, (_,i)=>i);
+    wrap.style.gridTemplateColumns = (bus.layout==='2x1_30') ? 'repeat(3,1fr)' : 'repeat(4,1fr)';
+  }
+  // create seat elements
+  indices.forEach(i=>{
+    const name = bus.seatNames[i]; const st = bus.seats[i];
+    const el = document.createElement('div'); el.className='seat'; el.textContent = name;
+    if(st===1) el.classList.add('booked');
+    else if(st===2) el.classList.add('blocked');
+    else if(st===3) el.classList.add('reserved');
+    else if(selectedIdx.includes(i)) el.classList.add('selected');
+    else el.classList.add('free');
+    // only allow clicking if free
+    el.onclick = ()=> {
+      if(st!==0 && !selectedIdx.includes(i)){ /* blocked/booked/reserved, can't select */ return; }
+      if(!getSession() || getSession().role!=='user'){ alert('Login as user to select seats'); U.show('page-index'); return; }
+      if(selectedIdx.includes(i)) selectedIdx = selectedIdx.filter(x=>x!==i); else selectedIdx.push(i);
+      renderSeatGrid(bus);
+      updateFare();
+    };
+    wrap.appendChild(el);
   });
-}
-
-function toggleSeat(i){
-  const s=getSession(); if(!(s&&s.role==='user')){ alert('Please login as User first.'); Util.showPage('page-index'); return; }
-  const bus = DB.load('buses', []).find(x=>x.id===currentBusId);
-  if(!bus) return;
-  if(bus.seats[i]!==0){ return; } // only free seats toggle
-  if(selectedSeatIdx.includes(i)) selectedSeatIdx = selectedSeatIdx.filter(x=>x!==i);
-  else selectedSeatIdx.push(i);
-  renderSeatGrid(bus); updateFare();
+  U.qs('#fareInfo').textContent = U.money(bus.price);
 }
 
 function updateFare(){
-  const bus = DB.load('buses', []).find(x=>x.id===currentBusId);
-  const seatNames = selectedSeatIdx.map(i=>bus.seatNames[i]);
-  Util.qs('#selSeats').textContent = seatNames.length? seatNames.join(', ') : 'None';
-  Util.qs('#totalFare').textContent = Util.money(seatNames.length * (bus?bus.price:0));
-  Util.qs('#payBtn').disabled = !(getSession()?.role==='user' && seatNames.length>0);
+  const bus = DB.load('buses', []).find(b=>b.id===currentBusId);
+  if(!bus) return;
+  const seatNames = selectedIdx.map(i=>bus.seatNames[i]);
+  U.qs('#selSeats').textContent = seatNames.length ? seatNames.join(', ') : 'None';
+  U.qs('#totalFare').textContent = U.money(seatNames.length * bus.price);
+  U.qs('#payBtn').disabled = !(getSession()?.role==='user' && seatNames.length>0);
 }
 
-Util.qs('#searchBtn').onclick = ()=>{
-  const f=Util.qs('#fromInp').value.trim().toLowerCase();
-  const t=Util.qs('#toInp').value.trim().toLowerCase();
-  const d=Util.qs('#dateInp').value;
-  const bn=Util.qs('#busNoInp').value.trim().toLowerCase();
-  renderBuses(b => (!f||b.from.toLowerCase().includes(f)) &&
-                   (!t||b.to.toLowerCase().includes(t)) &&
-                   (!d||b.date===d) &&
-                   (!bn||b.busNo.toLowerCase().includes(bn)));
-};
-Util.qs('#resetBtn').onclick = ()=>{ ['fromInp','toInp','dateInp','busNoInp'].forEach(id=>Util.qs('#'+id).value=''); renderBuses(); };
+/* ---------------------------
+   Payment (demo) => create pending booking (reserve seats)
+----------------------------*/
+U.qs('#payBtn').onclick = ()=> { U.qs('#paymentCard').classList.remove('hidden'); U.qs('#payRef').value=''; };
+U.qs('#cancelPayBtn').onclick = ()=> U.qs('#paymentCard').classList.add('hidden');
 
-Util.qs('#payBtn').onclick = ()=>{ Util.qs('#paymentCard').classList.remove('hidden'); Util.qs('#payRef').value=''; };
-Util.qs('#cancelPayBtn').onclick = ()=> Util.qs('#paymentCard').classList.add('hidden');
-
-Util.qs('#confirmPayBtn').onclick = ()=>{
-  const s=getSession(); if(!(s&&s.role==='user')) return;
-  const buses = DB.load('buses', []); const bus = buses.find(x=>x.id===currentBusId); if(!bus) return;
-  // recheck availability
-  if(selectedSeatIdx.some(i=>bus.seats[i]!==0)){ alert('Some seats became unavailable. Re-select.'); openSeatMap(bus.id); return; }
-  // book seats
-  selectedSeatIdx.forEach(i=> bus.seats[i]=1);
-  DB.save('buses', buses);
-  const seatNames = selectedSeatIdx.map(i=>bus.seatNames[i]);
-  const amount = seatNames.length * bus.price;
+U.qs('#confirmPayBtn').onclick = ()=>{
+  const s = getSession(); if(!s || s.role!=='user') return alert('Login as user');
+  const bus = DB.load('buses', []).find(b=>b.id===currentBusId); if(!bus) return;
+  // check seat availability (not booked or blocked or reserved by another)
+  if(selectedIdx.some(i => bus.seats[i]!==0)){ alert('Some seats were taken. Please reselect.'); openSeatMap(bus.id); return; }
+  // mark seats as reserved (3)
+  selectedIdx.forEach(i => bus.seats[i]=3);
+  DB.save('buses', DB.load('buses', []));
+  // create booking with status Pending
   const pnr = 'PNR' + Math.floor(100000 + Math.random()*900000);
-  const method = Util.qs('#payMethod').value; const ref = (Util.qs('#payRef').value.trim() || '(demo)');
-  const bookings = DB.load('bookings', []);
-  bookings.push({ pnr, user:s.username, busId:bus.id, busNo:bus.busNo, route:`${bus.from} → ${bus.to}`, date:bus.date, time:bus.time, seats:seatNames, amount, method, ref, ts:Date.now() });
-  DB.save('bookings', bookings);
-  alert('Payment successful! Generating PDF ticket…');
-  // PDF
-  generateTicketPDF({pnr, user:s.username, bus});
-  // reset & refresh
-  selectedSeatIdx=[]; Util.qs('#paymentCard').classList.add('hidden');
+  const amount = selectedIdx.length * bus.price;
+  const booking = { id: U.id(), pnr, user: s.username, busId: bus.id, busNo: bus.busNo, route: `${bus.from}→${bus.to}`, date: bus.date, time: bus.time, seats: selectedIdx.map(i=>bus.seatNames[i]), amount, method: U.qs('#payMethod').value, ref: U.qs('#payRef').value||'(demo)', status:'Pending', ts: Date.now(), pdf:false };
+  const bookings = DB.load('bookings', []); bookings.push(booking); DB.save('bookings',bookings);
+  // clear selection
+  selectedIdx = []; U.qs('#paymentCard').classList.add('hidden');
+  alert('Booking requested. Status: Pending. Admin will confirm or reject shortly.');
   renderSeatGrid(bus); renderBuses(); renderMyBookings(); renderAdminBookings();
 };
 
-/* =========================
-   PDF Ticket (client-side)
-========================= */
-function generateTicketPDF({pnr, user, bus}){
-  // Minimal PDF with text content (A4 portrait points: 612x792)
-  const doc = new jspdf.jsPDF(); // tiny embedded builder
-  const now = new Date();
-  const lines = [
-    "BUS E-TICKET (Demo)",
-    "-------------------------------------",
-    "PNR: " + pnr,
-    "Passenger (User ID): " + user,
-    "Bus No.: " + bus.busNo,
-    "Route: " + bus.from + " → " + bus.to,
-    "Date: " + bus.date + "   Time: " + bus.time,
-    "Seats: " + selectedSeatIdx.map(i=>bus.seatNames[i]).join(', '),
-    "Fare per seat: " + Util.money(bus.price),
-    "Total: " + Util.money(selectedSeatIdx.length * bus.price),
-    "Layout: " + bus.layout,
-    "Generated: " + now.toLocaleString(),
-    "Note: This is a demo ticket generated locally."
-  ];
-  let y=40;
-  doc.text("Bus Booking — eTicket", 40, y); y+=14;
-  lines.forEach(l=>{ doc.text(l, 40, y); y+=14; });
-  doc.save("Ticket_"+pnr+".pdf");
-}
-
-/* =========================
-   My Bookings
-========================= */
+/* ---------------------------
+   My Bookings (user) - shows Pending/Confirmed/Rejected and download ticket if confirmed
+----------------------------*/
 function renderMyBookings(){
-  const s=getSession(); const card=Util.qs('#myBookingsCard'); const tbody=Util.qs('#myBookingsTable tbody'); tbody.innerHTML='';
-  if(!(s&&s.role==='user')){ card.classList.add('hidden'); return; }
-  const bookings = DB.load('bookings', []).filter(b=>b.user===s.username).sort((a,b)=>b.ts-a.ts);
+  const s = getSession(); const wrap = U.qs('#myBookings'); const tbody = U.qs('#myBookingsTable tbody'); tbody.innerHTML='';
+  if(!(s && s.role==='user')){ wrap.classList.add('hidden'); return; }
+  const bookings = DB.load('bookings', []).filter(b=>b.user===s.username).sort((a,b)=>b.ts-b.ts);
   bookings.forEach(b=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML = `<td>${b.pnr}</td><td>${b.busNo}</td><td>${b.route}</td><td>${b.date}</td><td>${b.time}</td><td>${b.seats.join(', ')}</td><td>${Util.money(b.amount)}</td><td>CONFIRMED</td>`;
+    const tr = document.createElement('tr');
+    const ticketBtn = (b.status==='Confirmed') ? `<button class="btn" data-pnr="${b.pnr}" data-action="dl">Download</button>` : (b.status==='Pending' ? 'Pending' : 'Rejected');
+    tr.innerHTML = `<td>${b.pnr}</td><td>${b.busNo}</td><td>${b.date}</td><td>${b.seats.join(', ')}</td><td>${U.money(b.amount)}</td><td>${b.status}</td><td>${ticketBtn}</td>`;
     tbody.appendChild(tr);
   });
-  card.classList.remove('hidden');
+  // download handlers
+  U.qsa('[data-action="dl"]').forEach(btn=> btn.onclick = (e)=> {
+    const pnr = btn.dataset.pnr; const b = DB.load('bookings', []).find(x=>x.pnr===pnr);
+    if(!b) return; const bus = DB.load('buses',[]).find(x=>x.id===b.busId); generateTicketPDF(b, bus);
+  });
+  wrap.classList.remove('hidden');
 }
 
-/* =========================
-   Admin Panel
-========================= */
-function adminOnly(){ const s=getSession(); if(!(s&&s.role==='admin')){ alert('Admin only'); Util.showPage('page-index'); return false } return true; }
+/* ---------------------------
+   Admin: buses list, bookings, confirm/reject, export CSV
+----------------------------*/
+function adminCheck(){ const s=getSession(); if(!s || s.role!=='admin'){ alert('Admin only'); U.show('page-index'); return false } return true; }
 
 function renderAdminBuses(){
-  const wrap=Util.qs('#adminBusList'); wrap.innerHTML='';
-  const buses = DB.load('buses', []);
+  const wrap = U.qs('#adminBusList'); wrap.innerHTML=''; const buses = DB.load('buses', []);
   buses.forEach(b=>{
-    const filled=b.seats.filter(x=>x===1).length, free=b.seats.filter(x=>x===0).length, blocked=b.seats.filter(x=>x===2).length;
-    const div=document.createElement('div'); div.className='list-item';
-    div.innerHTML = `
-      <div>
-        <div style="font-weight:700">${b.busNo}</div>
-        <div class="small">${b.from} → ${b.to} • ${b.date} • ${b.time} • ${b.seats.length} seats</div>
-        <div class="small">Booked: ${filled} • Free: ${free} • Blocked: ${blocked} • Price: ${Util.money(b.price)}</div>
-        <div class="small">Layout: ${b.layout}</div>
-      </div>
-      <div class="row">
-        <button class="btn ghost" data-act="edit" data-id="${b.id}">Edit</button>
-        <button class="btn danger" data-act="del" data-id="${b.id}">Delete</button>
-      </div>`;
+    const booked = b.seats.filter(x=>x===1).length, reserved = b.seats.filter(x=>x===3).length, blocked = b.seats.filter(x=>x===2).length;
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `<div>
+      <div style="font-weight:700">${b.busNo}</div>
+      <div class="muted">${b.from}→${b.to} • ${b.date} • ${b.time} • ${b.seatNames.length} seats</div>
+      <div class="muted">Booked:${booked} • Pending:${reserved} • Blocked:${blocked} • Price:${U.money(b.price)}</div>
+    </div>
+    <div class="row"><button class="btn ghost" data-act="edit" data-id="${b.id}">Edit</button><button class="btn danger" data-act="del" data-id="${b.id}">Delete</button></div>`;
     wrap.appendChild(div);
   });
-  wrap.querySelectorAll('button[data-act="edit"]').forEach(btn=> btn.onclick=()=> loadBusForEdit(btn.dataset.id));
-  wrap.querySelectorAll('button[data-act="del"]').forEach(btn=> btn.onclick=()=> deleteBus(btn.dataset.id));
+  wrap.querySelectorAll('button[data-act="edit"]').forEach(btn=>btn.onclick = ()=> loadBusForEdit(btn.dataset.id));
+  wrap.querySelectorAll('button[data-act="del"]').forEach(btn=>btn.onclick = ()=> { if(confirm('Delete bus?')){ DB.save('buses', DB.load('buses',[]).filter(x=>x.id!==btn.dataset.id)); renderAdminBuses(); renderBuses(); }});
 }
+
+function renderAdminBookings(){
+  if(!adminCheck()) return;
+  const tbody = U.qs('#adminBookingsTable tbody'); tbody.innerHTML='';
+  const bookings = DB.load('bookings', []).sort((a,b)=>b.ts-a.ts);
+  bookings.forEach(b=>{
+    const tr = document.createElement('tr');
+    const actions = (b.status==='Pending') ? `<button class="btn" data-pnr="${b.pnr}" data-act="confirm">Confirm</button> <button class="btn danger" data-pnr="${b.pnr}" data-act="reject">Reject</button>` : (b.status==='Confirmed' ? 'Confirmed' : 'Rejected');
+    tr.innerHTML = `<td>${b.pnr}</td><td>${b.user}</td><td>${b.busNo}</td><td>${b.date}</td><td>${b.seats.join(', ')}</td><td>${U.money(b.amount)}</td><td>${b.status}</td><td>${actions}</td>`;
+    tbody.appendChild(tr);
+  });
+  // bind confirm/reject
+  U.qsa('[data-act="confirm"]').forEach(btn=> btn.onclick = ()=> adminConfirm(btn.dataset.pnr));
+  U.qsa('[data-act="reject"]').forEach(btn=> btn.onclick = ()=> adminReject(btn.dataset.pnr));
+}
+
+function adminConfirm(pnr){
+  if(!adminCheck()) return;
+  const bookings = DB.load('bookings', []); const b = bookings.find(x=>x.pnr===pnr); if(!b) return alert('Booking not found');
+  if(b.status!=='Pending') return alert('Already processed');
+  // mark booking confirmed and update bus seats (reserved->booked)
+  const buses = DB.load('buses', []); const bus = buses.find(x=>x.id===b.busId);
+  // for each seat name in booking, find index and set to 1
+  b.seats.forEach(sname=>{
+    const idx = bus.seatNames.indexOf(sname); if(idx>=0) bus.seats[idx]=1;
+  });
+  b.status='Confirmed'; b.confirmedAt = Date.now(); b.pdf = true; // mark PDF generated later
+  DB.save('buses', buses); DB.save('bookings', bookings);
+  alert('Booking confirmed — PDF ticket will be generated for record download.');
+  // generate and download PDF for admin (and user can download later)
+  generateTicketPDF(b, bus);
+  renderAdminBuses(); renderAdminBookings(); renderBuses(); renderMyBookings();
+}
+
+function adminReject(pnr){
+  if(!adminCheck()) return;
+  if(!confirm('Reject this booking?')) return;
+  const bookings = DB.load('bookings', []); const b = bookings.find(x=>x.pnr===pnr); if(!b) return;
+  if(b.status!=='Pending') return alert('Already processed');
+  // release reserved seats: find bus, set seats with those names from 3 -> 0
+  const buses = DB.load('buses', []); const bus = buses.find(x=>x.id===b.busId);
+  b.seats.forEach(sname=>{
+    const idx = bus.seatNames.indexOf(sname); if(idx>=0 && bus.seats[idx]===3) bus.seats[idx]=0;
+  });
+  b.status='Rejected'; DB.save('buses', buses); DB.save('bookings', bookings);
+  alert('Booking rejected and seats released.');
+  renderAdminBuses(); renderAdminBookings(); renderBuses(); renderMyBookings();
+}
+
+/* ---------------------------
+   Admin: load/edit bus
+----------------------------*/
 function loadBusForEdit(id){
-  const b = DB.load('buses', []).find(x=>x.id===id); if(!b) return;
-  Util.qs('#editingBusId').value=b.id;
-  Util.qs('#busNo').value=b.busNo; Util.qs('#busFrom').value=b.from; Util.qs('#busTo').value=b.to;
-  Util.qs('#busDate').value=b.date; Util.qs('#busTime').value=b.time; Util.qs('#busPrice').value=b.price;
-  Util.qs('#layout').value=b.layout;
-  // prefill blocked seats list
-  const blocked = b.seatNames.filter((n,i)=>b.seats[i]===2);
-  Util.qs('#blockedSeats').value = blocked.join(',');
+  const bus = DB.load('buses', []).find(x=>x.id===id); if(!bus) return;
+  U.qs('#editingBusId').value = bus.id;
+  U.qs('#admBusNo').value = bus.busNo; U.qs('#admFrom').value = bus.from; U.qs('#admTo').value = bus.to;
+  U.qs('#admDate').value = bus.date; U.qs('#admTime').value = bus.time; U.qs('#admPrice').value = bus.price; U.qs('#admLayout').value = bus.layout;
+  const blocked = bus.seatNames.filter((n,i)=>bus.seats[i]===2);
+  U.qs('#admBlocked').value = blocked.join(',');
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function deleteBus(id){
-  if(!confirm('Delete this bus?')) return;
-  let buses=DB.load('buses', []); buses=buses.filter(x=>x.id!==id); DB.save('buses', buses); renderAdminBuses(); renderBuses();
-}
-Util.qs('#clearBusBtn').onclick = ()=>{ ['busNo','busFrom','busTo','busDate','busTime','busPrice','blockedSeats','editingBusId'].forEach(i=>Util.qs('#'+i).value=''); Util.qs('#layout').value='2x2_40'; };
 
-Util.qs('#saveBusBtn').onclick = ()=>{
-  if(!adminOnly()) return;
-  const busNo=Util.qs('#busNo').value.trim(), from=Util.qs('#busFrom').value.trim(), to=Util.qs('#busTo').value.trim();
-  const date=Util.qs('#busDate').value, time=Util.qs('#busTime').value.trim(), price=Number(Util.qs('#busPrice').value);
-  const layout=Util.qs('#layout').value, blockedRaw=(Util.qs('#blockedSeats').value.trim());
-  if(!busNo||!from||!to||!date||!time||!price){ alert('Please fill all fields'); return; }
-  const blocked = blockedRaw? blockedRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+U.qs('#clearBus').onclick = ()=> { ['admBusNo','admFrom','admTo','admDate','admTime','admPrice','admBlocked','editingBusId'].forEach(id=>U.qs('#'+id).value=''); U.qs('#admLayout').value='sleeper_45'; }
+
+U.qs('#saveBus').onclick = ()=> {
+  if(!adminCheck()) return;
+  const busNo = U.qs('#admBusNo').value.trim(), from=U.qs('#admFrom').value.trim(), to=U.qs('#admTo').value.trim();
+  const date=U.qs('#admDate').value, time=U.qs('#admTime').value.trim(), price=Number(U.qs('#admPrice').value), layout=U.qs('#admLayout').value;
+  const blockedRaw = U.qs('#admBlocked').value.trim(); const blocked = blockedRaw? blockedRaw.split(',').map(s=>s.trim()).filter(Boolean):[];
+  if(!busNo||!from||!to||!date||!time||!price) return alert('Fill all fields');
   let buses = DB.load('buses', []);
-  const editing = Util.qs('#editingBusId').value;
+  const editing = U.qs('#editingBusId').value;
   if(editing){
     const idx = buses.findIndex(x=>x.id===editing);
     if(idx>-1){
-      // if layout changed, rebuild seat map; otherwise, just reapply blocked
       const old = buses[idx];
-      let seatNames = (old.layout===layout) ? old.seatNames.slice() : Layouts[layout]();
-      let seats = new Array(seatNames.length).fill(0);
-      // keep existing booked seats only if names still exist and same layout
+      // if layout unchanged keep booked seats; otherwise rebuild mapping
+      const seatNames = (old.layout === layout) ? old.seatNames.slice() : Layouts[layout]();
+      let seats = seatNames.map(n=> blocked.includes(n)?2:0);
       if(old.layout===layout){
-        seats = old.seatNames.map((name,i)=>{
-          const was = old.seats[i];
-          if(was===1) return 1;
-          return blocked.includes(name)?2:0;
-        });
-      } else {
-        // different layout: only apply blocked
-        seats = seatNames.map(n => blocked.includes(n)?2:0);
+        // preserve booked seats
+        old.seatNames.forEach((n,i)=>{ const pos = seatNames.indexOf(n); if(pos>=0 && old.seats[i]===1) seats[pos]=1; });
       }
       buses[idx] = { ...old, busNo, from, to, date, time, price, layout, seatNames, seats };
     }
@@ -619,66 +623,75 @@ Util.qs('#saveBusBtn').onclick = ()=>{
     buses.push(makeBus({busNo, from, to, date, time, price, layout, blocked}));
   }
   DB.save('buses', buses);
-  renderAdminBuses(); renderBuses(); Util.qs('#clearBusBtn').click(); alert('Saved');
+  alert('Saved');
+  renderAdminBuses(); renderBuses();
 };
 
-/* =========================
-   Exports (CSV for Excel)
-========================= */
-function downloadCSV(filename, rows){
-  const csv = rows.map(r=> r.map(v=>{
-    const s=(v??'').toString().replace(/"/g,'""'); return `"${s}"`;
-  }).join(',')).join('\r\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download=filename; a.click();
-  URL.revokeObjectURL(url);
+/* ---------------------------
+   Exports (CSV)
+----------------------------*/
+function downloadCSV(fn, rows){
+  const csv = rows.map(r => r.map(c => '"'+(c??'').toString().replace(/"/g,'""') +'"').join(',')).join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=fn; a.click(); URL.revokeObjectURL(url);
 }
-Util.qs('#exportBusesCsv').onclick = ()=> {
-  if(!adminOnly()) return;
-  const buses = DB.load('buses', []);
-  const rows = [["BusNo","From","To","Date","Time","Price","Layout","TotalSeats","Booked","Free","Blocked"]];
-  buses.forEach(b=>{
-    const booked=b.seats.filter(x=>x===1).length, free=b.seats.filter(x=>x===0).length, blocked=b.seats.filter(x=>x===2).length;
-    rows.push([b.busNo,b.from,b.to,b.date,b.time,Util.money(b.price),b.layout,b.seats.length,booked,free,blocked]);
+U.qs('#exportBuses').onclick = ()=> {
+  if(!adminCheck()) return;
+  const rows = [['BusNo','From','To','Date','Time','Price','Layout','TotalSeats','Booked','Reserved','Blocked']];
+  DB.load('buses', []).forEach(b=>{
+    rows.push([b.busNo,b.from,b.to,b.date,b.time,b.price,b.layout,b.seatNames.length,b.seats.filter(x=>x===1).length,b.seats.filter(x=>x===3).length,b.seats.filter(x=>x===2).length]);
   });
-  downloadCSV("buses.csv", rows);
+  downloadCSV('buses.csv', rows);
 };
-Util.qs('#exportBookingsCsv').onclick = ()=> {
-  if(!adminOnly()) return;
-  const bookings = DB.load('bookings', []).sort((a,b)=>b.ts-a.ts);
-  const rows = [["PNR","User","BusNo","Route","Date","Time","Seats","Amount","Method","Ref","BookedAt"]];
-  bookings.forEach(b=>{
-    rows.push([b.pnr,b.user,b.busNo,b.route,b.date,b.time,b.seats.join(' '),b.amount, b.method, b.ref, new Date(b.ts).toLocaleString()]);
+U.qs('#exportBookings').onclick = ()=> {
+  if(!adminCheck()) return;
+  const rows = [['PNR','User','BusNo','Route','Date','Time','Seats','Amount','Method','Ref','Status','BookedAt']];
+  DB.load('bookings', []).forEach(b=>{
+    rows.push([b.pnr,b.user,b.busNo,b.route,b.date,b.time,b.seats.join(' '),b.amount,b.method,b.ref,b.status, new Date(b.ts).toLocaleString()]);
   });
-  downloadCSV("bookings.csv", rows);
+  downloadCSV('bookings.csv', rows);
 };
 
-/* =========================
-   Admin bookings table
-========================= */
-function renderAdminBookings(){
-  const tbody=Util.qs('#adminBookingsTable tbody'); tbody.innerHTML='';
-  const bookings = DB.load('bookings', []).sort((a,b)=>b.ts-a.ts);
-  bookings.forEach(b=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML = `<td>${b.pnr}</td><td>${b.user}</td><td>${b.busNo}</td><td>${b.route}</td><td>${b.date}</td><td>${b.time}</td><td>${b.seats.join(', ')}</td><td>${Util.money(b.amount)}</td><td>${b.method}</td>`;
-    tbody.appendChild(tr);
-  });
+/* ---------------------------
+   Ticket PDF generation (simple)
+   - uses embedded jsPDF tiny builder
+----------------------------*/
+function generateTicketPDF(booking, bus){
+  try{
+    const doc = new jspdf.jsPDF();
+    let y=40;
+    doc.text("Bus e-Ticket (Demo)", 40, y); y+=16;
+    doc.text("PNR: " + booking.pnr, 40, y); y+=12;
+    doc.text("Passenger: " + booking.user, 40, y); y+=12;
+    doc.text("Bus No: " + (booking.busNo || bus.busNo), 40, y); y+=12;
+    doc.text("Route: " + (booking.route || (bus.from+'→'+bus.to)), 40, y); y+=12;
+    doc.text("Date/Time: " + (booking.date || bus.date) + " / " + (booking.time || bus.time), 40, y); y+=12;
+    doc.text("Seats: " + booking.seats.join(', '), 40, y); y+=12;
+    doc.text("Amount: " + U.money(booking.amount), 40, y); y+=12;
+    doc.text("Status: " + booking.status, 40, y); y+=12;
+    doc.text("Generated: " + new Date().toLocaleString(), 40, y); y+=12;
+    doc.save('Ticket_'+booking.pnr+'.pdf');
+    // mark booking as having pdf available
+    const bookings = DB.load('bookings', []); const bk = bookings.find(x=>x.pnr===booking.pnr); if(bk){ bk.pdf = true; DB.save('bookings', bookings); }
+  }catch(e){ console.error('pdf err', e); alert('PDF generation failed') }
 }
 
-/* =========================
-   Initial load
-========================= */
+/* ---------------------------
+   Admin confirm/reject actions already defined above call render functions
+----------------------------*/
+
+/* ---------------------------
+   Initial render
+----------------------------*/
 (function init(){
   renderSession();
-  const s=getSession();
-  if(s?.role==='user'){ Util.showPage('page-booking'); renderBuses(); renderMyBookings(); }
-  else if(s?.role==='admin'){ Util.showPage('page-admin'); renderAdminBuses(); renderAdminBookings(); }
-  else { Util.showPage('page-index'); }
-
-  // initial bus render if user goes to booking via header button
+  const s = getSession();
+  if(s?.role==='user'){ U.show('page-booking'); renderBuses(); renderMyBookings(); }
+  else if(s?.role==='admin'){ U.show('page-admin'); renderAdminBuses(); renderAdminBookings(); }
+  else { U.show('page-index'); }
   renderBuses();
+  renderAdminBuses();
+  renderAdminBookings();
 })();
 </script>
 </body>
