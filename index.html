@@ -1,101 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bus Live Seat Booking — Demo (HTML Only)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bus Booking — All-in-One (HTML)</title>
 <style>
   :root{
-    --bg:#0f172a;        /* slate-900 */
-    --panel:#111827;     /* gray-900 */
-    --muted:#1f2937;     /* gray-800 */
-    --text:#e5e7eb;      /* gray-200 */
-    --sub:#9ca3af;       /* gray-400 */
-    --brand:#22c55e;     /* green-500 */
-    --brand-2:#3b82f6;   /* blue-500 */
-    --danger:#ef4444;    /* red-500 */
-    --warn:#f59e0b;      /* amber-500 */
-    --ok:#10b981;        /* emerald-500 */
+    --bg:#0f172a; --panel:#111827; --muted:#1f2937; --text:#e5e7eb; --sub:#9ca3af;
+    --brand:#22c55e; --brand2:#3b82f6; --danger:#ef4444; --warn:#f59e0b; --ok:#10b981;
   }
   *{box-sizing:border-box}
+  html,body{height:100%}
   body{
-    margin:0;
-    background:linear-gradient(135deg, #0f172a 0%, #0b1227 100%);
-    color:var(--text);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
+    margin:0; background:linear-gradient(135deg,#0f172a,#0b1227); color:var(--text);
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    display:flex;flex-direction:column;
   }
-  header{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 20px;
-    position:sticky;top:0;z-index:5;
-    background:rgba(15,23,42,.85);
-    backdrop-filter: blur(6px);
-    border-bottom:1px solid #1f2937;
-  }
-  .brand{display:flex;align-items:center;gap:12px;font-weight:800}
-  .brand .logo{
-    width:36px;height:36px;border-radius:12px;
-    background: radial-gradient(120% 120% at 30% 30%, var(--brand) 0%, var(--brand-2) 50%, #6d28d9 100%);
-    box-shadow:0 8px 30px rgba(59,130,246,.35);
-  }
-  .badge{font-size:12px;color:#a7f3d0;border:1px solid #064e3b;padding:4px 8px;border-radius:999px;background:#064e3b22}
-  main{width:min(1100px, 96%);margin:24px auto;display:grid;gap:16px}
-  .grid{display:grid;gap:16px}
-  .two{grid-template-columns: 1.2fr .8fr}
-  @media (max-width: 960px){.two{grid-template-columns: 1fr}}
-  .card{
-    background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
-    border:1px solid #1f2937; border-radius:18px; padding:16px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
-  }
-  .card h3{margin:0 0 12px;font-size:18px}
+  a{color:#93c5fd;text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(15,23,42,.85);
+    border-bottom:1px solid #1f2937;position:sticky;top:0;z-index:10;backdrop-filter: blur(6px);}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+  .logo{width:34px;height:34px;border-radius:12px;background:radial-gradient(120% 120% at 30% 30%,var(--brand) 0%,var(--brand2) 50%,#6d28d9 100%);box-shadow:0 8px 30px rgba(59,130,246,.35)}
+  .small{font-size:12px;color:var(--sub)}
+  main{width:min(1100px,96%);margin:24px auto;display:grid;gap:16px}
+  .grid{display:grid;gap:12px}
+  .two{grid-template-columns:1.1fr .9fr}
+  @media (max-width:960px){.two{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));border:1px solid #1f2937;border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .card h3{margin:0 0 10px;font-size:18px}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .space{justify-content:space-between}
-  input, select, button, textarea{
-    background:#0b1227;border:1px solid #273249;
-    color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none;
-  }
-  input:focus, select:focus, textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+  input,select,button,textarea{background:#0b1227;border:1px solid #273249;color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none}
+  input:focus,select:focus,textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
   button{cursor:pointer;border:none}
-  .btn{background:var(--brand-2);font-weight:600}
+  .btn{background:var(--brand2);font-weight:700;padding:9px 12px;border-radius:10px}
   .btn.alt{background:var(--brand)}
-  .btn.ghost{background:transparent;border:1px solid #334155}
+  .btn.ghost{background:transparent;border:1px solid #334155;padding:8px 10px}
   .btn.warn{background:var(--warn)}
   .btn.danger{background:var(--danger)}
   .btn:disabled{opacity:.6;cursor:not-allowed}
-  .divider{height:1px;background:#1f2937;margin:12px 0}
-  .tabs{display:flex; gap:8px; flex-wrap:wrap}
+  .pill{padding:6px 10px;border-radius:999px;background:#0b1227;border:1px solid #334155;color:#cbd5e1;font-size:12px}
+  .list{display:grid;gap:10px}
+  .list-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #1f2937;border-radius:14px;background:linear-gradient(180deg,#0b1227,#0a1020)}
+  .divider{height:1px;background:#1f2937;margin:10px 0}
+  .notice{padding:10px;border-left:3px solid #3b82f6;background:#0b1227;border-radius:8px}
+  .table{width:100%;border-collapse:collapse}
+  .table th,.table td{border-bottom:1px solid #1f2937;text-align:left;padding:8px}
+  .table th{color:#cbd5e1;font-weight:700}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap}
   .tab{padding:8px 12px;border-radius:999px;border:1px solid #334155;background:#0b1227;cursor:pointer}
   .tab.active{background:#1e293b}
-  .pill{padding:4px 8px;border-radius:999px;background:#0b1227;border:1px solid #334155;color:#cbd5e1;font-size:12px}
-  .list{display:grid;gap:10px}
-  .list-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #1f2937;border-radius:14px;background:linear-gradient(180deg, #0b1227, #0a1020)}
-  .small{font-size:12px;color:var(--sub)}
   .right{margin-left:auto}
-  .seat-grid{
-    display:grid;grid-template-columns: repeat(4, 1fr);gap:8px;background:#0b1227;border:1px dashed #334155;padding:12px;border-radius:14px
-  }
-  .seat{
-    height:42px;border-radius:10px;border:1px solid #334155;
-    display:flex;align-items:center;justify-content:center;
-    user-select:none
-  }
+  .seat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#0b1227;border:1px dashed #334155;padding:12px;border-radius:14px}
+  .seat{height:46px;border-radius:10px;border:1px solid #334155;display:flex;align-items:center;justify-content:center;user-select:none;font-weight:700}
   .seat.free{background:#052e1a;border-color:#064e3b;color:#86efac}
-  .seat.selected{background:#062a48;border-color:#1d4ed8;color:#bfdbfe;box-shadow:0 0 0 3px rgba(59,130,246,.25) inset}
+  .seat.selected{background:#062a48;border-color:#1d4ed8;color:#bfdbfe;box-shadow:0 0 0 3px rgba(59,130,246,.18) inset}
   .seat.booked{background:#3a0d0d;border-color:#7f1d1d;color:#fecaca;text-decoration:line-through}
   .legend{display:flex;gap:10px;align-items:center}
   .legend .swatch{width:14px;height:14px;border-radius:4px;border:1px solid #334155}
   .swatch.free{background:#052e1a;border-color:#064e3b}
   .swatch.sel{background:#062a48;border-color:#1d4ed8}
   .swatch.booked{background:#3a0d0d;border-color:#7f1d1d}
-  .notice{padding:10px;border-left:3px solid #3b82f6;background:#0b1227;border-radius:8px}
-  .table{width:100%;border-collapse:collapse}
-  .table th, .table td{border-bottom:1px solid #1f2937;text-align:left;padding:8px}
-  .table th{color:#cbd5e1;font-weight:700}
-  .kicker{color:#a5b4fc;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+  footer{color:#94a3b8;text-align:center;padding:12px 0}
+  .hidden{display:none}
+  /* small helpers */
+  .muted{color:var(--sub);font-size:13px}
 </style>
 </head>
 <body>
@@ -103,511 +72,528 @@
     <div class="brand">
       <div class="logo"></div>
       <div>
-        <div>Bus Live Seat Booking</div>
-        <div class="small">Pure HTML + CSS + JS (LocalStorage)</div>
+        Bus Booking
+        <div class="small">RedBus-style demo — All in one HTML</div>
       </div>
     </div>
     <div id="sessionArea" class="row"></div>
   </header>
 
-  <main class="grid two">
-    <!-- Left: Booking & User -->
-    <section class="grid" id="bookingArea">
-      <div class="card">
-        <div class="row space">
+  <main id="appMain" class="grid" style="width:min(1100px,96%);margin:20px auto">
+    <!-- Index / Login -->
+    <section id="page-index" class="card">
+      <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:1;min-width:320px">
+          <div class="tabs" style="margin-bottom:8px">
+            <button class="tab active" data-tab="loginTab">User Login</button>
+            <button class="tab" data-tab="signupTab">Sign Up</button>
+            <button class="tab" data-tab="adminTab">Admin</button>
+          </div>
+
+          <div id="loginTab">
+            <h3>User Login</h3>
+            <div class="row" style="margin-top:8px">
+              <input id="loginUser" placeholder="Username" />
+              <input id="loginPass" type="password" placeholder="Password" />
+              <button class="btn" id="loginBtn">Login</button>
+            </div>
+          </div>
+
+          <div id="signupTab" class="hidden">
+            <h3>Create Account</h3>
+            <div class="row" style="margin-top:8px">
+              <input id="suUser" placeholder="Choose username" />
+              <input id="suPass" type="password" placeholder="Choose password" />
+              <button class="btn alt" id="signupBtn">Create</button>
+            </div>
+            <div class="muted" style="margin-top:8px">After creating account, use Login tab. No email required for demo.</div>
+          </div>
+
+          <div id="adminTab" class="hidden">
+            <h3>Admin Login</h3>
+            <div class="row" style="margin-top:8px">
+              <input id="adminUser" placeholder="Admin ID (default: admin)" />
+              <input id="adminPass" type="password" placeholder="Password (default: admin123)" />
+              <button class="btn warn" id="adminLoginBtn">Admin Login</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:380px;min-width:260px">
+          <div class="card">
+            <h3>Quick Links</h3>
+            <div class="row" style="margin-top:8px">
+              <button class="pill btn" id="goBookingBtn" style="padding:8px 10px">User Booking</button>
+              <button class="pill btn ghost" id="goAdminBtn" style="padding:8px 10px">Admin Panel</button>
+            </div>
+            <div class="divider"></div>
+            <h3>How it works</h3>
+            <ol class="muted">
+              <li>Sign up / Login as user.</li>
+              <li>Open <strong>User Booking</strong> → Search bus → View seats.</li>
+              <li>Select multiple seats (green→blue), then pay (demo) → seats lock red.</li>
+              <li>Admin can manage buses & view bookings.</li>
+            </ol>
+            <div class="divider"></div>
+            <div class="muted">Admin default: <strong>admin</strong> / <strong>admin123</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking Page -->
+    <section id="page-booking" class="hidden card">
+      <div class="row space" style="align-items:flex-start">
+        <div>
           <h3>Find a Bus</h3>
+          <div class="muted">Search by route & date, then click <em>View Seats</em></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
           <span class="pill" id="busCountPill">0 buses</span>
+          <button class="btn ghost" id="backHomeFromBooking">Home</button>
         </div>
-        <div class="row" style="gap:12px;flex-wrap:wrap">
-          <input id="fromInp" placeholder="From (e.g., Bhubaneswar)" />
-          <input id="toInp" placeholder="To (e.g., Kolkata)" />
-          <input id="dateInp" type="date" />
-          <button class="btn" id="searchBtn">Search</button>
-          <button class="btn ghost" id="resetBtn">Reset</button>
-        </div>
-        <div class="divider"></div>
-        <div id="busList" class="list"></div>
       </div>
 
-      <div class="card" id="seatCard" style="display:none">
+      <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+        <input id="fromInp" placeholder="From (city)" />
+        <input id="toInp" placeholder="To (city)" />
+        <input id="dateInp" type="date" value="" />
+        <button class="btn" id="searchBtn">Search</button>
+        <button class="btn ghost" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div id="busList" class="list"></div>
+
+      <div id="seatCard" class="card hidden" style="margin-top:12px">
         <div class="row space">
           <h3 id="seatTitle">Select Seats</h3>
           <div class="legend">
-            <div class="swatch free"></div><span class="small">Free</span>
-            <div class="swatch sel"></div><span class="small">Selected</span>
-            <div class="swatch booked"></div><span class="small">Booked</span>
+            <div class="swatch free" style="width:14px;height:14px;border-radius:3px"></div><span class="muted">Free</span>
+            <div class="swatch sel" style="width:14px;height:14px;border-radius:3px"></div><span class="muted">Selected</span>
+            <div class="swatch booked" style="width:14px;height:14px;border-radius:3px"></div><span class="muted">Booked</span>
           </div>
         </div>
-        <div id="seatGrid" class="seat-grid"></div>
+
+        <div id="seatGrid" class="seat-grid" style="margin-top:12px"></div>
+
         <div class="row space" style="margin-top:12px">
+          <div class="row" style="gap:8px"><span class="muted">Selected:</span><span id="selSeats" class="pill">None</span></div>
           <div class="row" style="gap:8px">
-            <span class="small">Selected:</span>
-            <span id="selSeats" class="pill">None</span>
-          </div>
-          <div class="row" style="gap:8px">
-            <span class="small">Total:</span>
-            <span id="totalFare" class="pill">₹0</span>
+            <span class="muted">Total:</span><span id="totalFare" class="pill">₹0</span>
             <button class="btn alt" id="payBtn" disabled>Proceed to Payment</button>
           </div>
         </div>
       </div>
 
-      <div class="card" id="paymentCard" style="display:none">
-        <h3>Payment</h3>
-        <div class="notice small">Demo payment only. No real charge. Choose a method and click Pay.</div>
-        <div class="row" style="gap:12px;margin-top:10px">
+      <div id="paymentCard" class="card hidden" style="margin-top:12px">
+        <h3>Payment (Demo)</h3>
+        <div class="notice muted">This is a demo payment — no real money is transferred. Enter any reference and confirm.</div>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
           <select id="payMethod">
-            <option value="UPI">UPI</option>
-            <option value="Card">Card</option>
-            <option value="NetBanking">Net Banking</option>
+            <option>UPI</option>
+            <option>Card</option>
+            <option>NetBanking</option>
           </select>
-          <input id="payRef" placeholder="UPI ID / Card ****1234 / Bank Ref" />
+          <input id="payRef" placeholder="UPI ID / Card last 4 / Ref" />
           <button class="btn" id="confirmPayBtn">Pay & Confirm</button>
           <button class="btn ghost" id="cancelPayBtn">Cancel</button>
         </div>
       </div>
 
-      <div class="card" id="myBookingsCard" style="display:none">
+      <div id="myBookingsCard" class="card hidden" style="margin-top:12px">
         <h3>My Bookings</h3>
         <table class="table" id="myBookingsTable">
-          <thead>
-            <tr>
-              <th>PNR</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th><th>Status</th>
-            </tr>
-          </thead>
+          <thead><tr><th>PNR</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th><th>Status</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
     </section>
 
-    <!-- Right: Auth & Admin -->
-    <aside class="grid" id="rightSide">
-      <div class="card" id="authCard">
-        <div class="tabs" style="margin-bottom:8px">
-          <button class="tab active" data-tab="loginTab">Login</button>
-          <button class="tab" data-tab="signupTab">Sign Up</button>
-          <button class="tab" data-tab="adminTab">Admin</button>
-        </div>
-
-        <div id="loginTab">
-          <div class="kicker">User Login</div>
-          <div class="row" style="margin-top:10px;gap:8px">
-            <input id="loginUser" placeholder="Username" />
-            <input id="loginPass" type="password" placeholder="Password" />
-            <button class="btn" id="loginBtn">Login</button>
-          </div>
-        </div>
-
-        <div id="signupTab" style="display:none">
-          <div class="kicker">Create Account</div>
-          <div class="row" style="margin-top:10px;gap:8px">
-            <input id="suUser" placeholder="Choose Username" />
-            <input id="suPass" type="password" placeholder="Choose Password" />
-            <button class="btn alt" id="signupBtn">Sign Up</button>
-          </div>
-          <div class="small" style="margin-top:8px">Tip: Keep it simple. You can log in immediately after sign up.</div>
-        </div>
-
-        <div id="adminTab" style="display:none">
-          <div class="kicker">Admin Login</div>
-          <div class="row" style="margin-top:10px;gap:8px">
-            <input id="adminUser" placeholder="Admin ID (default: admin)" />
-            <input id="adminPass" type="password" placeholder="Password (default: admin123)" />
-            <button class="btn warn" id="adminLoginBtn">Login</button>
-          </div>
+    <!-- Admin Page -->
+    <section id="page-admin" class="hidden card">
+      <div class="row space">
+        <h3>Admin Panel</h3>
+        <div>
+          <button class="btn ghost" id="adminHomeBtn">Home</button>
+          <button class="btn danger" id="forceLogoutAdmin">Logout</button>
         </div>
       </div>
 
-      <div class="card" id="adminPanel" style="display:none">
-        <div class="row space"><h3>Admin Panel</h3><button class="btn ghost" id="adminLogoutBtn">Logout</button></div>
-        <div class="divider"></div>
-        <div class="kicker">Create / Edit Bus</div>
-        <div class="row" style="gap:8px;margin-top:8px;flex-wrap:wrap">
-          <input id="busFrom" placeholder="From" />
-          <input id="busTo" placeholder="To" />
-          <input id="busDate" type="date" />
-          <input id="busTime" placeholder="Time (e.g., 08:00 AM)" />
-          <input id="busPrice" type="number" placeholder="Price (₹)" />
-          <select id="busSeatsCount">
-            <option>30</option><option>36</option><option>40</option><option>44</option><option>48</option>
-          </select>
-          <button class="btn" id="saveBusBtn">Save Bus</button>
-          <button class="btn ghost" id="clearBusBtn">Clear</button>
-        </div>
-        <input type="hidden" id="editingBusId" />
-        <div class="divider"></div>
-        <div class="kicker">All Buses</div>
-        <div id="adminBusList" class="list" style="margin-top:8px"></div>
+      <div class="divider"></div>
 
-        <div class="divider"></div>
-        <div class="kicker">All Bookings</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input id="busFrom" placeholder="From" />
+        <input id="busTo" placeholder="To" />
+        <input id="busDate" type="date" value="" />
+        <input id="busTime" placeholder="Time (e.g., 08:00 AM)" />
+        <input id="busPrice" type="number" placeholder="Price (₹)" />
+        <select id="busSeatsCount"><option>30</option><option>36</option><option>40</option><option>44</option><option>48</option></select>
+        <button class="btn" id="saveBusBtn">Save Bus</button>
+        <button class="btn ghost" id="clearBusBtn">Clear</button>
+      </div>
+      <input type="hidden" id="editingBusId">
+
+      <div class="divider"></div>
+
+      <div>
+        <h3>All Buses</h3>
+        <div id="adminBusList" class="list"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <h3>All Bookings</h3>
         <table class="table" id="adminBookingsTable">
-          <thead>
-            <tr><th>PNR</th><th>User</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th></tr>
-          </thead>
+          <thead><tr><th>PNR</th><th>User</th><th>Route</th><th>Date</th><th>Time</th><th>Seats</th><th>Amount</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
-    </aside>
+    </section>
   </main>
 
+  <footer>© Bus Booking Demo — LocalStorage</footer>
+
 <script>
-/* ------------------------
-   LocalStorage persistence
--------------------------*/
+/* -------------------------
+   Utility & LocalStorage DB
+--------------------------*/
 const DB = {
-  load(key, def){ try { return JSON.parse(localStorage.getItem(key)) ?? def } catch { return def } },
+  load(key, def){ try { return JSON.parse(localStorage.getItem(key)) ?? def } catch(e){ return def } },
   save(key, val){ localStorage.setItem(key, JSON.stringify(val)) }
 };
+const Util = {
+  qs(s){ return document.querySelector(s) },
+  qsa(s){ return Array.from(document.querySelectorAll(s)) },
+  id(){ return (crypto?.randomUUID?.() || 'id'+Math.floor(Math.random()*1e9)) },
+  formatINR(n){ return '₹' + Number(n).toLocaleString('en-IN') },
+  today(){ return new Date().toISOString().slice(0,10) },
+  showPage(id){
+    ['page-index','page-booking','page-admin'].forEach(p => Util.qs('#'+p).classList.add('hidden'));
+    Util.qs('#'+id).classList.remove('hidden');
+    renderSession();
+  }
+};
 
-// Seed default admin + demo buses if not present
+/* -------------------------
+   Seed initial data
+--------------------------*/
 (function seed(){
   const users = DB.load('users', []);
-  if(!users.find(u => u.username === 'admin')){
-    users.push({ username:'admin', password:'admin123', role:'admin' });
+  if(!users.find(u=>u.username==='admin')){
+    users.push({username:'admin', password:'admin123', role:'admin'});
     DB.save('users', users);
   }
-  const buses = DB.load('buses', []);
-  if(buses.length === 0){
-    const today = new Date(); const dstr = today.toISOString().slice(0,10);
+  if(!DB.load('buses', null)){
+    const d = Util.today();
     DB.save('buses', [
-      makeBus('Bhubaneswar','Kolkata', dstr, '08:00 AM', 550, 36),
-      makeBus('Bhubaneswar','Delhi',   dstr, '05:00 PM', 1200, 40),
+      makeBus('Bhubaneswar','Kolkata', d, '08:00 AM', 550, 36),
+      makeBus('Bhubaneswar','Delhi', d, '05:00 PM', 1200, 40),
+      makeBus('Kolkata','Bhubaneswar', d, '06:30 PM', 600, 36)
     ]);
   }
-  if(!DB.load('bookings', null)){ DB.save('bookings', []) }
+  if(!DB.load('bookings', null)) DB.save('bookings', []);
+  if(DB.load('session', null) === null) DB.save('session', null);
 })();
 
 function makeBus(from,to,date,time,price,count){
-  return {
-    id: crypto.randomUUID(),
-    from, to, date, time, price: Number(price),
-    seats: Array.from({length: Number(count)}, () => 0) // 0=free, 1=booked
-  }
+  return { id: Util.id(), from, to, date, time, price: Number(price), seats: Array.from({length:Number(count)}, ()=>0) };
 }
 
-function formatINR(n){ return '₹' + Number(n).toLocaleString('en-IN') }
-function qs(s){ return document.querySelector(s) }
-function qsa(s){ return [...document.querySelectorAll(s)] }
-
-/* ------------------------
-   Session & Auth
--------------------------*/
-let session = DB.load('session', null);
-
-function setSession(s){ session = s; DB.save('session', s); renderSession(); renderMyBookings(); }
-function logout(){ setSession(null) }
+/* -------------------------
+   Session & header render
+--------------------------*/
+function getSession(){ return DB.load('session', null) }
+function setSession(s){ DB.save('session', s); renderSession(); }
+function clearSession(){ DB.save('session', null); renderSession(); Util.showPage('page-index'); }
 
 function renderSession(){
-  const sa = qs('#sessionArea');
+  const sa = Util.qs('#sessionArea');
   sa.innerHTML = '';
-  const row = document.createElement('div'); row.className='row'; row.style.gap='8px';
-  if(session){
-    row.innerHTML = \`
-      <span class="pill">Signed in: \${session.username} \${session.role==='admin'?'(Admin)':''}</span>
-      <button class="btn ghost" id="logoutBtn">Logout</button>
-    \`;
-  }else{
-    row.innerHTML = '<span class="small">Not signed in</span>';
+  const s = getSession();
+  if(s){
+    const span = document.createElement('div'); span.className = 'row'; span.style.gap='8px';
+    span.innerHTML = `<span class="pill">Signed in: ${s.username} ${s.role==='admin' ? '(Admin)' : ''}</span>
+                      <button class="btn ghost" id="headerLogout">Logout</button>`;
+    sa.appendChild(span);
+    const btn = Util.qs('#headerLogout'); if(btn) btn.onclick = ()=>{ clearSession(); };
+  } else {
+    const a = document.createElement('div'); a.innerHTML = `<a href="#" id="headerHomeLink">Home</a>`;
+    sa.appendChild(a);
+    const link = Util.qs('#headerHomeLink'); if(link) link.onclick = (e)=>{ e.preventDefault(); Util.showPage('page-index') };
   }
-  sa.appendChild(row);
-  const btn = qs('#logoutBtn'); if(btn) btn.onclick = logout;
-
-  // toggle admin panel
-  qs('#adminPanel').style.display = (session && session.role==='admin') ? 'block':'none';
 }
 
-function switchTab(tabId){
-  qsa('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tabId));
-  ['loginTab','signupTab','adminTab'].forEach(id => qs('#'+id).style.display = (id===tabId)?'block':'none');
-}
-qsa('.tab').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
-
-// Login
-qs('#loginBtn').onclick = () => {
-  const u = qs('#loginUser').value.trim();
-  const p = qs('#loginPass').value;
-  const users = DB.load('users', []);
-  const found = users.find(x => x.username===u && x.password===p && x.role!=='admin');
-  if(found){ setSession({ username:u, role:'user' }); alert('Welcome ' + u) }
-  else alert('Invalid credentials (user). Sign up if new.');
-};
-
-// Signup
-qs('#signupBtn').onclick = () => {
-  const u = qs('#suUser').value.trim();
-  const p = qs('#suPass').value;
-  if(!u || !p){ alert('Enter username & password'); return }
-  const users = DB.load('users', []);
-  if(users.find(x => x.username===u)){ alert('Username already exists'); return }
-  users.push({ username:u, password:p, role:'user' });
-  DB.save('users', users);
-  alert('Account created. You can login now.');
-  switchTab('loginTab');
-};
-
-// Admin login/logout
-qs('#adminLoginBtn').onclick = () => {
-  const u = qs('#adminUser').value.trim() || 'admin';
-  const p = qs('#adminPass').value || 'admin123';
-  const users = DB.load('users', []);
-  const found = users.find(x => x.username===u && x.password===p && x.role==='admin');
-  if(found){ setSession({ username:u, role:'admin' }); alert('Admin logged in') }
-  else alert('Wrong admin credentials');
-};
-qs('#adminLogoutBtn').onclick = logout;
-
-/* ------------------------
-   Search & List Buses
--------------------------*/
-function renderBuses(filter=null){
-  const buses = DB.load('buses', []);
-  const list = qs('#busList'); list.innerHTML='';
-  const filtered = (filter? buses.filter(filter) : buses);
-  qs('#busCountPill').textContent = \`\${filtered.length} buses\`;
-
-  filtered.forEach(b => {
-    const li = document.createElement('div'); li.className='list-item';
-    const filled = b.seats.filter(s=>s===1).length;
-    li.innerHTML = \`
-      <div>
-        <div style="font-weight:700">\${b.from} → \${b.to}</div>
-        <div class="small">\${b.date} • \${b.time}</div>
-        <div class="small">\${formatINR(b.price)} per seat • \${b.seats.length-filled} free / \${b.seats.length}</div>
-      </div>
-      <div class="row">
-        <button class="btn" data-act="select" data-id="\${b.id}">Select</button>
-      </div>
-    \`;
-    list.appendChild(li);
+/* -------------------------
+   Index page (Login/Signup/Admin)
+--------------------------*/
+(function indexInit(){
+  // tabs
+  Util.qsa('.tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      Util.qsa('.tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active');
+      ['loginTab','signupTab','adminTab'].forEach(id=> Util.qs('#'+id).classList.toggle('hidden', btn.dataset.tab !== id));
+    });
   });
 
-  // Hook select buttons
-  list.querySelectorAll('button[data-act=\"select\"]').forEach(btn => {
-    btn.onclick = () => openSeatMap(btn.dataset.id);
-  });
-}
-renderBuses();
+  // login user
+  Util.qs('#loginBtn').onclick = ()=>{
+    const u = Util.qs('#loginUser').value.trim(), p = Util.qs('#loginPass').value;
+    const users = DB.load('users', []);
+    const found = users.find(x=>x.username===u && x.password===p && x.role!=='admin');
+    if(found){ setSession({username:u, role:'user'}); alert('Welcome ' + u); Util.showPage('page-booking'); renderBuses(); renderMyBookings(); }
+    else alert('Invalid user credentials. Sign up if new.');
+  };
 
-qs('#searchBtn').onclick = () => {
-  const f = qs('#fromInp').value.trim().toLowerCase();
-  const t = qs('#toInp').value.trim().toLowerCase();
-  const d = qs('#dateInp').value;
-  renderBuses(b => {
-    return (!f || b.from.toLowerCase().includes(f)) &&
-           (!t || b.to.toLowerCase().includes(t)) &&
-           (!d || b.date===d);
-  });
-};
-qs('#resetBtn').onclick = () => { qs('#fromInp').value=''; qs('#toInp').value=''; qs('#dateInp').value=''; renderBuses(); };
+  // signup
+  Util.qs('#signupBtn').onclick = ()=>{
+    const u = Util.qs('#suUser').value.trim(), p = Util.qs('#suPass').value;
+    if(!u||!p){ alert('Enter username & password'); return; }
+    const users = DB.load('users', []);
+    if(users.find(x=>x.username===u)){ alert('Username already exists'); return; }
+    users.push({username:u,password:p,role:'user'});
+    DB.save('users', users);
+    alert('Account created. Please login.');
+    // auto switch to login tab
+    const loginTabBtn = Util.qsa('.tab').find(t=>t.dataset.tab==='loginTab'); if(loginTabBtn) loginTabBtn.click();
+  };
 
-/* ------------------------
-   Seat Selection & Payment
--------------------------*/
+  // admin login
+  Util.qs('#adminLoginBtn').onclick = ()=>{
+    const u = Util.qs('#adminUser').value.trim() || 'admin', p = Util.qs('#adminPass').value || 'admin123';
+    const users = DB.load('users', []);
+    const found = users.find(x=>x.username===u && x.password===p && x.role==='admin');
+    if(found){ setSession({username:u, role:'admin'}); alert('Admin logged in'); Util.showPage('page-admin'); renderAdminBuses(); renderAdminBookings(); }
+    else alert('Wrong admin credentials');
+  };
+
+  // Quick links
+  Util.qs('#goBookingBtn').onclick = ()=>{ Util.showPage('page-booking'); renderBuses(); renderMyBookings(); };
+  Util.qs('#goAdminBtn').onclick = ()=>{ Util.showPage('page-admin'); renderAdminBuses(); renderAdminBookings(); };
+})();
+
+/* -------------------------
+   Booking Page Logic
+--------------------------*/
 let currentBusId = null;
 let selectedSeats = [];
 
+function renderBuses(filter=null){
+  const buses = DB.load('buses', []);
+  const list = Util.qs('#busList'); list.innerHTML = '';
+  const filtered = filter ? buses.filter(filter) : buses;
+  Util.qs('#busCountPill').textContent = `${filtered.length} buses`;
+  filtered.forEach(b=>{
+    const filled = b.seats.filter(s=>s===1).length;
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `<div>
+        <div style="font-weight:700">${b.from} → ${b.to}</div>
+        <div class="muted">${b.date} • ${b.time}</div>
+        <div class="muted">${Util.formatINR(b.price)} per seat • ${b.seats.length-filled} free / ${b.seats.length}</div>
+      </div>
+      <div class="row">
+        <button class="btn" data-act="select" data-id="${b.id}">View Seats</button>
+      </div>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('button[data-act="select"]').forEach(btn => { btn.onclick = ()=> openSeatMap(btn.dataset.id) });
+}
+
+Util.qs('#searchBtn').onclick = ()=>{
+  const f = Util.qs('#fromInp').value.trim().toLowerCase(), t = Util.qs('#toInp').value.trim().toLowerCase(), d = Util.qs('#dateInp').value;
+  renderBuses(b=> (!f || b.from.toLowerCase().includes(f)) && (!t || b.to.toLowerCase().includes(t)) && (!d || b.date===d));
+};
+Util.qs('#resetBtn').onclick = ()=>{ Util.qs('#fromInp').value=''; Util.qs('#toInp').value=''; Util.qs('#dateInp').value=''; renderBuses(); };
+
 function openSeatMap(busId){
   const buses = DB.load('buses', []);
-  const b = buses.find(x => x.id===busId);
-  if(!b){ alert('Bus not found'); return }
-  currentBusId = busId;
-  selectedSeats = [];
-  qs('#seatCard').style.display = 'block';
-  qs('#seatTitle').textContent = \`Select Seats — \${b.from} → \${b.to} (\${b.date} • \${b.time})\`;
+  const b = buses.find(x=>x.id===busId);
+  if(!b){ alert('Bus not found'); return; }
+  currentBusId = busId; selectedSeats = [];
+  Util.qs('#seatCard').classList.remove('hidden');
+  Util.qs('#paymentCard').classList.add('hidden');
+  Util.qs('#seatTitle').textContent = `Select Seats — ${b.from} → ${b.to} (${b.date} • ${b.time})`;
   renderSeatGrid(b);
   updateFare();
-  // hide payment if open
-  qs('#paymentCard').style.display='none';
+  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
 }
 
 function renderSeatGrid(bus){
-  const seatGrid = qs('#seatGrid'); seatGrid.innerHTML = '';
-  // render seat buttons
-  bus.seats.forEach((state, idx) => {
-    const s = document.createElement('div'); s.className='seat';
+  const el = Util.qs('#seatGrid'); el.innerHTML = '';
+  bus.seats.forEach((state, idx)=>{
+    const s = document.createElement('div'); s.className = 'seat';
     s.textContent = idx+1;
-    if(state===1) s.classList.add('booked');
-    else {
-      const sel = selectedSeats.includes(idx);
-      s.classList.add(sel?'selected':'free');
-      s.onclick = () => {
-        if(sel){
-          selectedSeats = selectedSeats.filter(i => i!==idx);
-        }else{
-          selectedSeats.push(idx);
-        }
-        renderSeatGrid(bus);
-        updateFare();
-      };
-    }
-    seatGrid.appendChild(s);
-    // add aisle after two columns optionally
+    if(state === 1){ s.classList.add('booked') }
+    else if(selectedSeats.includes(idx)){ s.classList.add('selected'); s.onclick = ()=> toggleSeat(idx) }
+    else { s.classList.add('free'); s.onclick = ()=> toggleSeat(idx) }
+    el.appendChild(s);
   });
+}
+
+function toggleSeat(idx){
+  if(!getSession() || getSession().role !== 'user'){ alert('Please login as a User to select seats.'); Util.showPage('page-index'); return; }
+  if(selectedSeats.includes(idx)) selectedSeats = selectedSeats.filter(i=>i!==idx);
+  else selectedSeats.push(idx);
+  const buses = DB.load('buses', []);
+  const b = buses.find(x=>x.id===currentBusId); renderSeatGrid(b);
+  updateFare();
 }
 
 function updateFare(){
-  const buses = DB.load('buses', []);
-  const bus = buses.find(x => x.id===currentBusId);
+  const bus = DB.load('buses', []).find(x=>x.id===currentBusId);
   const seatsStr = selectedSeats.length ? selectedSeats.map(i=>i+1).join(', ') : 'None';
-  qs('#selSeats').textContent = seatsStr;
-  qs('#totalFare').textContent = formatINR(selectedSeats.length * (bus?bus.price:0));
-  qs('#payBtn').disabled = !(session && session.role==='user' && selectedSeats.length>0);
+  Util.qs('#selSeats').textContent = seatsStr;
+  Util.qs('#totalFare').textContent = Util.formatINR(selectedSeats.length * (bus ? bus.price : 0));
+  Util.qs('#payBtn').disabled = !(getSession() && getSession().role==='user' && selectedSeats.length>0);
 }
-qs('#payBtn').onclick = () => {
-  if(!session){ alert('Please login as user first.'); return }
-  qs('#paymentCard').style.display = 'block';
-  qs('#payRef').value='';
+
+Util.qs('#payBtn').onclick = ()=>{
+  if(!getSession() || getSession().role !== 'user'){ alert('Please login as user first'); Util.showPage('page-index'); return; }
+  Util.qs('#paymentCard').classList.remove('hidden'); Util.qs('#payRef').value='';
 };
+Util.qs('#cancelPayBtn').onclick = ()=> Util.qs('#paymentCard').classList.add('hidden');
 
-qs('#cancelPayBtn').onclick = () => { qs('#paymentCard').style.display='none' };
-
-qs('#confirmPayBtn').onclick = () => {
-  if(!session){ alert('Please login.'); return }
-  const method = qs('#payMethod').value;
-  const ref = qs('#payRef').value.trim() || '(demo)';
-  const buses = DB.load('buses', []);
-  const bus = buses.find(x => x.id===currentBusId);
-  if(!bus){ alert('Bus missing'); return }
-  if(selectedSeats.some(i => bus.seats[i]===1)){
-    alert('Some seats just got booked. Please re-select.'); openSeatMap(currentBusId); return;
-  }
-  // mark seats booked
-  selectedSeats.forEach(i => bus.seats[i]=1);
+Util.qs('#confirmPayBtn').onclick = ()=>{
+  const s = getSession(); if(!s || s.role!=='user') return;
+  const method = Util.qs('#payMethod').value; const ref = Util.qs('#payRef').value.trim() || '(demo)';
+  const buses = DB.load('buses', []); const bus = buses.find(x=>x.id===currentBusId);
+  if(!bus){ alert('Bus missing'); return; }
+  // double-check available
+  if(selectedSeats.some(i => bus.seats[i] === 1)){ alert('Some seats were booked by someone else. Please re-select.'); openSeatMap(currentBusId); return; }
+  // book seats
+  selectedSeats.forEach(i => bus.seats[i] = 1);
   DB.save('buses', buses);
-
   const amount = selectedSeats.length * bus.price;
   const pnr = 'PNR' + Math.floor(100000 + Math.random()*900000);
   const bookings = DB.load('bookings', []);
-  bookings.push({
-    pnr, user: session.username, busId: bus.id,
-    route: bus.from+' → '+bus.to, date: bus.date, time: bus.time,
-    seats: selectedSeats.map(i=>i+1), amount, method, ref, ts: Date.now()
-  });
+  bookings.push({ pnr, user: s.username, busId: bus.id, route: `${bus.from} → ${bus.to}`, date: bus.date, time: bus.time, seats: selectedSeats.map(i=>i+1), amount, method, ref, ts: Date.now() });
   DB.save('bookings', bookings);
-
   alert('Payment successful! Your PNR: ' + pnr);
+  // reset selection & refresh
   selectedSeats = [];
-  qs('#paymentCard').style.display='none';
-  openSeatMap(bus.id);
-  renderBuses();
-  renderMyBookings();
-  renderAdminBookings();
+  Util.qs('#paymentCard').classList.add('hidden');
+  renderSeatGrid(bus);
+  renderBuses(); renderMyBookings(); renderAdminBookings();
 };
 
-/* ------------------------
-   My Bookings (user)
--------------------------*/
+/* -------------------------
+   My Bookings (User)
+--------------------------*/
 function renderMyBookings(){
-  const card = qs('#myBookingsCard');
-  const tbody = qs('#myBookingsTable tbody'); tbody.innerHTML='';
-  if(!(session && session.role==='user')){ card.style.display='none'; return }
-  const bookings = DB.load('bookings', []).filter(b => b.user===session.username);
-  bookings.sort((a,b)=>b.ts-a.ts);
-  bookings.forEach(b => {
+  const card = Util.qs('#myBookingsCard'); const tbody = Util.qs('#myBookingsTable tbody'); tbody.innerHTML = '';
+  const s = getSession(); if(!(s && s.role==='user')){ card.classList.add('hidden'); return; }
+  const bookings = DB.load('bookings', []).filter(b=>b.user===s.username).sort((a,b)=>b.ts-a.ts);
+  bookings.forEach(b=>{
     const tr = document.createElement('tr');
-    tr.innerHTML = \`<td>\${b.pnr}</td><td>\${b.route}</td><td>\${b.date}</td><td>\${b.time}</td><td>\${b.seats.join(', ')}</td><td>\${formatINR(b.amount)}</td><td>CONFIRMED</td>\`;
+    tr.innerHTML = `<td>${b.pnr}</td><td>${b.route}</td><td>${b.date}</td><td>${b.time}</td><td>${b.seats.join(', ')}</td><td>${Util.formatINR(b.amount)}</td><td>CONFIRMED</td>`;
     tbody.appendChild(tr);
   });
-  card.style.display='block';
+  card.classList.remove('hidden');
 }
 
-/* ------------------------
-   Admin: Buses & Bookings
--------------------------*/
+/* -------------------------
+   Admin page logic
+--------------------------*/
+function adminMustBeLoggedIn(){
+  const s = getSession(); if(!s || s.role!=='admin'){ alert('Admin only. Please login as Admin.'); Util.showPage('page-index'); return false; } return true;
+}
+
 function renderAdminBuses(){
-  const wrap = qs('#adminBusList'); wrap.innerHTML='';
+  const wrap = Util.qs('#adminBusList'); wrap.innerHTML = '';
   const buses = DB.load('buses', []);
-  buses.forEach(b => {
+  buses.forEach(b=>{
     const filled = b.seats.filter(s=>s===1).length;
     const div = document.createElement('div'); div.className='list-item';
-    div.innerHTML = \`
-      <div>
-        <div style="font-weight:700">\${b.from} → \${b.to}</div>
-        <div class="small">\${b.date} • \${b.time} • \${b.seats.length} seats</div>
-        <div class="small">Booked: \${filled} • Free: \${b.seats.length-filled} • Price: \${formatINR(b.price)}</div>
+    div.innerHTML = `<div>
+        <div style="font-weight:700">${b.from} → ${b.to}</div>
+        <div class="muted">${b.date} • ${b.time} • ${b.seats.length} seats</div>
+        <div class="muted">Booked: ${filled} • Free: ${b.seats.length-filled} • Price: ${Util.formatINR(b.price)}</div>
       </div>
       <div class="row">
-        <button class="btn ghost" data-act="edit" data-id="\${b.id}">Edit</button>
-        <button class="btn danger" data-act="del" data-id="\${b.id}">Delete</button>
-      </div>
-    \`;
+        <button class="btn ghost" data-act="edit" data-id="${b.id}">Edit</button>
+        <button class="btn danger" data-act="del" data-id="${b.id}">Delete</button>
+      </div>`;
     wrap.appendChild(div);
   });
-  wrap.querySelectorAll('button[data-act="edit"]').forEach(btn => btn.onclick = ()=>loadBusForEdit(btn.dataset.id));
-  wrap.querySelectorAll('button[data-act="del"]').forEach(btn => btn.onclick = ()=>deleteBus(btn.dataset.id));
+  wrap.querySelectorAll('button[data-act="edit"]').forEach(btn=> btn.onclick = ()=> loadBusForEdit(btn.dataset.id));
+  wrap.querySelectorAll('button[data-act="del"]').forEach(btn=> btn.onclick = ()=> deleteBus(btn.dataset.id));
 }
 
 function loadBusForEdit(id){
-  const buses = DB.load('buses', []);
-  const b = buses.find(x => x.id===id); if(!b) return;
-  qs('#busFrom').value=b.from; qs('#busTo').value=b.to; qs('#busDate').value=b.date;
-  qs('#busTime').value=b.time; qs('#busPrice').value=b.price; qs('#busSeatsCount').value=b.seats.length;
-  qs('#editingBusId').value = b.id;
-  window.scrollTo({top:0, behavior:'smooth'});
+  const buses = DB.load('buses', []); const b = buses.find(x=>x.id===id); if(!b) return;
+  Util.qs('#busFrom').value = b.from; Util.qs('#busTo').value = b.to; Util.qs('#busDate').value = b.date;
+  Util.qs('#busTime').value = b.time; Util.qs('#busPrice').value = b.price; Util.qs('#busSeatsCount').value = b.seats.length;
+  Util.qs('#editingBusId').value = b.id; window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function deleteBus(id){
   if(!confirm('Delete this bus?')) return;
-  let buses = DB.load('buses', []);
-  buses = buses.filter(x => x.id!==id);
-  DB.save('buses', buses);
+  let buses = DB.load('buses', []); buses = buses.filter(x=>x.id!==id); DB.save('buses', buses);
   renderAdminBuses(); renderBuses();
 }
 
-qs('#clearBusBtn').onclick = () => {
-  ['busFrom','busTo','busDate','busTime','busPrice','editingBusId'].forEach(id => qs('#'+id).value='');
-  qs('#busSeatsCount').value='36';
-}
+Util.qs('#clearBusBtn').onclick = ()=>{
+  ['busFrom','busTo','busDate','busTime','busPrice','editingBusId'].forEach(id=> Util.qs('#'+id).value = '');
+  Util.qs('#busSeatsCount').value = '36';
+};
 
-qs('#saveBusBtn').onclick = () => {
-  const from = qs('#busFrom').value.trim();
-  const to   = qs('#busTo').value.trim();
-  const date = qs('#busDate').value;
-  const time = qs('#busTime').value.trim();
-  const price= Number(qs('#busPrice').value);
-  const count= Number(qs('#busSeatsCount').value);
-  if(!from || !to || !date || !time || !price){ alert('Please fill all fields'); return }
+Util.qs('#saveBusBtn').onclick = ()=>{
+  if(!adminMustBeLoggedIn()) return;
+  const from = Util.qs('#busFrom').value.trim(), to = Util.qs('#busTo').value.trim(), date = Util.qs('#busDate').value;
+  const time = Util.qs('#busTime').value.trim(), price = Number(Util.qs('#busPrice').value), count = Number(Util.qs('#busSeatsCount').value);
+  if(!from || !to || !date || !time || !price){ alert('Please fill all fields'); return; }
   let buses = DB.load('buses', []);
-  const editing = qs('#editingBusId').value;
+  const editing = Util.qs('#editingBusId').value;
   if(editing){
-    const idx = buses.findIndex(x => x.id===editing);
+    const idx = buses.findIndex(x=>x.id===editing);
     if(idx>-1){
-      const prev = buses[idx];
-      // keep existing bookings; if seat count changes, expand (new free seats) or shrink (truncate if needed)
-      let seats = prev.seats.slice();
-      if(count > seats.length){ seats = seats.concat(Array.from({length:count-seats.length}, ()=>0)) }
-      if(count < seats.length){ seats = seats.slice(0, count) }
+      const prev = buses[idx]; let seats = prev.seats.slice();
+      if(count > seats.length) seats = seats.concat(Array.from({length:count-seats.length}, ()=>0));
+      if(count < seats.length) seats = seats.slice(0,count);
       buses[idx] = { ...prev, from, to, date, time, price, seats };
     }
-  }else{
+  } else {
     buses.push(makeBus(from,to,date,time,price,count));
   }
   DB.save('buses', buses);
-  renderAdminBuses(); renderBuses();
-  qs('#clearBusBtn').click();
+  renderAdminBuses(); renderBuses(); Util.qs('#clearBusBtn').click(); alert('Saved');
 };
 
 function renderAdminBookings(){
-  const tbody = qs('#adminBookingsTable tbody'); tbody.innerHTML='';
-  const bookings = DB.load('bookings', []);
-  bookings.sort((a,b)=>b.ts-a.ts);
-  bookings.forEach(b => {
+  const tbody = Util.qs('#adminBookingsTable tbody'); tbody.innerHTML = '';
+  const bookings = DB.load('bookings', []).sort((a,b)=>b.ts - a.ts);
+  bookings.forEach(b=>{
     const tr = document.createElement('tr');
-    tr.innerHTML = \`<td>\${b.pnr}</td><td>\${b.user}</td><td>\${b.route}</td><td>\${b.date}</td><td>\${b.time}</td><td>\${b.seats.join(', ')}</td><td>\${formatINR(b.amount)}</td>\`;
+    tr.innerHTML = `<td>${b.pnr}</td><td>${b.user}</td><td>${b.route}</td><td>${b.date}</td><td>${b.time}</td><td>${b.seats.join(', ')}</td><td>${Util.formatINR(b.amount)}</td>`;
     tbody.appendChild(tr);
   });
 }
 
-// Initial admin renders (if already logged in)
-renderSession();
-renderAdminBuses();
-renderAdminBookings();
+/* -------------------------
+   Simple auth & navigation
+--------------------------*/
+Util.qs('#backHomeFromBooking').onclick = ()=> Util.showPage('page-index');
+Util.qs('#adminHomeBtn').onclick = ()=> Util.showPage('page-index');
+Util.qs('#forceLogoutAdmin').onclick = ()=> { clearSession(); alert('Logged out'); Util.showPage('page-index'); };
 
+// allow direct navigation from header
+Util.qs('#goBookingBtn')?.addEventListener('click', ()=> { Util.showPage('page-booking'); renderBuses(); renderMyBookings(); });
+Util.qs('#goAdminBtn')?.addEventListener('click', ()=> { if(getSession() && getSession().role==='admin') { Util.showPage('page-admin'); renderAdminBuses(); renderAdminBookings(); } else Util.showPage('page-index'); });
+
+/* -------------------------
+   Initial rendering
+--------------------------*/
+(function init(){
+  renderSession();
+  // show booking page if user already logged in
+  const s = getSession();
+  if(s && s.role === 'user'){ Util.showPage('page-booking'); renderBuses(); renderMyBookings(); }
+  else if(s && s.role === 'admin'){ Util.showPage('page-admin'); renderAdminBuses(); renderAdminBookings(); }
+  else { Util.showPage('page-index'); }
+})();
 </script>
+
 </body>
 </html>
-"""
-with open("/mnt/data/bus_live_seat_booking.html","w", encoding="utf-8") as f:
-    f.write(html_content)
-"/mnt/data/bus_live_seat_booking.html"
